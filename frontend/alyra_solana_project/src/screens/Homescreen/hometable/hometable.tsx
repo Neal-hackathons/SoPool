@@ -2,21 +2,28 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 import { SAMPLE_DATA } from "./sample-data";
 
-// export function getData(): Promise<Payment[]> {
-// Fetch data from your API here.
-//   return [
-//     {
-//       id: "728ed52f",
-//       amount: 100,
-//       status: "pending",
-//       email: "m@example.com",
-//     },
-// // ...
-//   ]
-// }
+
+import { createContext, useState, useEffect, useContext, useMemo } from "react";
+import { SystemProgram } from "@solana/web3.js";
+import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import { Keypair } from "@solana/web3.js";
+import { Thing } from "./types";
+
+export function getData(): Array<Thing> {
+// Fetch data from your the Pool contract.
+	//const { pool } = viewPools();
+  
+	return [
+     {
+       pool: "SOOLO",
+       description: "kjhjkhjk",
+       yield: 5.2,
+     }
+   ]
+ }
 
 export function HomeTable() {
-	//   const data = await getData()
+	//const pools = getData();
 
 	return (
 		<div className="container mx-auto py-10">
