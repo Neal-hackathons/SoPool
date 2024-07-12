@@ -3,9 +3,11 @@ import { HomeTable } from "@/screens/Homescreen/hometable/hometable";
 
 export default function Home() {
 	return (
-		<main className="min-h-screen p-24 bg-blue-600">
+		<main className="min-h-screen h-full bg-blue-600">
 			<AppHeader />
-			<HomeTable/>
+			<section className="grid">
+				<HomeTable />
+			</section>
 		</main>
 	);
 }
