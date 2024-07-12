@@ -1,13 +1,14 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { AnchorProvider, Program, type Wallet, type Idl} from "@project-serum/anchor";
+//import { WalletAdapter } from "@solana/wallet-adapter-wallets";
+import type { Connection } from "@solana/web3.js";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-import { AnchorProvider, Program, Wallet, Idl} from "@project-serum/anchor";
-//import { WalletAdapter } from "@solana/wallet-adapter-wallets";
-import { Connection, PublicKey } from "@solana/web3.js";
+
 
 import IDL from "./idl.json";
 import {

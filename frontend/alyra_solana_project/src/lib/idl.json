@@ -1,1 +1,59 @@
-{"version":"0.1.0","name":"so_pool","instructions":[{"name":"initialize","accounts":[{"name":"pool","isMut":true,"isSigner":true},{"name":"signer","isMut":true,"isSigner":true},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"poolYield","type":"f32"}]},{"name":"stakeCrypto","accounts":[{"name":"pool","isMut":true,"isSigner":false},{"name":"pooler","isMut":true,"isSigner":false},{"name":"signer","isMut":true,"isSigner":true},{"name":"systemProgram","isMut":false,"isSigner":false}],"args":[{"name":"pool","type":"publicKey"},{"name":"amount","type":"f32"}]}],"accounts":[{"name":"Pool","type":{"kind":"struct","fields":[{"name":"name","type":"string"},{"name":"description","type":"string"},{"name":"owner","type":"publicKey"},{"name":"poolYield","type":"f32"},{"name":"prize","type":"f32"},{"name":"active","type":"bool"}]}},{"name":"Pooler","type":{"kind":"struct","fields":[{"name":"address","type":"publicKey"},{"name":"pool","type":"publicKey"},{"name":"amount","type":"f32"}]}}]}
+{
+	"version": "0.1.0",
+	"name": "so_pool",
+	"instructions": [
+		{
+			"name": "initialize",
+			"accounts": [
+				{ "name": "pool", "isMut": true, "isSigner": true },
+				{ "name": "signer", "isMut": true, "isSigner": true },
+				{ "name": "systemProgram", "isMut": false, "isSigner": false }
+			],
+			"args": [
+				{ "name": "name", "type": "string" },
+				{ "name": "description", "type": "string" },
+				{ "name": "poolYield", "type": "f32" }
+			]
+		},
+		{
+			"name": "stakeCrypto",
+			"accounts": [
+				{ "name": "pool", "isMut": true, "isSigner": false },
+				{ "name": "pooler", "isMut": true, "isSigner": false },
+				{ "name": "signer", "isMut": true, "isSigner": true },
+				{ "name": "systemProgram", "isMut": false, "isSigner": false }
+			],
+			"args": [
+				{ "name": "pool", "type": "publicKey" },
+				{ "name": "amount", "type": "f32" }
+			]
+		}
+	],
+	"accounts": [
+		{
+			"name": "Pool",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{ "name": "name", "type": "string" },
+					{ "name": "description", "type": "string" },
+					{ "name": "owner", "type": "publicKey" },
+					{ "name": "poolYield", "type": "f32" },
+					{ "name": "prize", "type": "f32" },
+					{ "name": "active", "type": "bool" }
+				]
+			}
+		},
+		{
+			"name": "Pooler",
+			"type": {
+				"kind": "struct",
+				"fields": [
+					{ "name": "address", "type": "publicKey" },
+					{ "name": "pool", "type": "publicKey" },
+					{ "name": "amount", "type": "f32" }
+				]
+			}
+		}
+	]
+}

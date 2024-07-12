@@ -23,10 +23,10 @@ export const AppProvider = ({ children }) => {
   }, [connection, wallet]);
 
   useEffect(() => {
-    if(pools.length == 0){
+    if(pools.length === 0){
       viewPools();
     }
-  }, [program]);
+  }, []);
 
   const [pools, setPools] = useState([]);
 
