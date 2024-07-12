@@ -38,7 +38,8 @@ function Wallet({ children }: { children: React.ReactNode }) {
 export function ConnectWallet() {
 	return (
 		<Wallet>
-			<WalletMultiButton style={{ color: "black", backgroundColor: "yellow", borderRadius: "30px", }} />
+			{/* rgb(253 224 71 / var(--tw-bg-opacity)) /* #fde047 */}
+			<WalletMultiButton style={{ color: "black", backgroundColor: "#fde047", borderRadius: "30px", }} />
 		</Wallet>
 	);
 }
