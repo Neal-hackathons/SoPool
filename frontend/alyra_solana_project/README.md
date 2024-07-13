@@ -12,6 +12,12 @@ pnpm run dev
 pnpm run build
 ```
 
+and then
+
+```shell
+pnpm run start
+```
+
 
 ## Deploy
 
