@@ -9,7 +9,7 @@ import {
   PublicKey,
   SystemProgram,
 } from "@solana/web3.js";
-import { TOKEN_PROGRAM_ID,createMint,createAssociatedTokenAccount,mintToChecked,transferChecked } from "@solana/spl-token";
+import { TOKEN_PROGRAM_ID,createMint,createAssociatedTokenAccount,mintToChecked,transferChecked, ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { assert } from "chai";
 
 
@@ -46,6 +46,7 @@ describe("alyra-staking", () => {
   // ATA
   let adminTokenAccount: PublicKey;
   let userTokenAccount: PublicKey;
+  let wallet_synth_x: PublicKey;
 
   const poolInfo = Keypair.generate();
 
@@ -54,6 +55,7 @@ describe("alyra-staking", () => {
 
   let vault_x_pda, vb;
   let receipt_pda, rb;
+  let synth_x_pda, sb;
 
   before(async () => {
 
@@ -100,6 +102,12 @@ describe("alyra-staking", () => {
       program.programId
     );
 
+    [synth_x_pda, sb] = 
+    await PublicKey.findProgramAddress(
+      [Buffer.from("synthetic"), mintPubkey.toBuffer()],
+      program.programId
+    );
+
     
 
     // create ATA
@@ -116,6 +124,8 @@ describe("alyra-staking", () => {
       mintPubkey, // mint
       user.publicKey // owner,
     );
+
+    
 
     // mint to user
     let txhash = await mintToChecked(
@@ -140,14 +150,14 @@ describe("alyra-staking", () => {
 
 
 
-
     const tx = await program.methods.initialize().accounts({
+        syntheticX: synth_x_pda,
         vaultX: vault_x_pda, 
         tokenX: mintPubkey,         
         payer: admin.publicKey, 
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID, 
-        //associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID, 
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID, 
         //rent: SYSVAR_RENT_PUBKEY
         })
         //.signers([admin, poolInfo])
@@ -179,6 +189,8 @@ describe("alyra-staking", () => {
       .signers([user])
       .rpc();
 
+  // new synthetic account 
+  wallet_synth_x = await createAssociatedTokenAccount(provider.connection, admin, synth_x_pda, user.publicKey);
 
   // new synthetic account 
  //let wallet_synth_x = await token.createAssociatedTokenAccount(connection, wallet, synth_x_pda, provider.wallet.publicKey, null, token.TOKEN_PROGRAM_ID, token.ASSOCIATED_TOKEN_PROGRAM_ID)
@@ -186,11 +198,11 @@ describe("alyra-staking", () => {
 
   let operation_accounts = { 
     tokenX: mintPubkey,  
-    //syntheticX: synth_x_pda, 
+    syntheticX: synth_x_pda, 
     vaultX: vault_x_pda, 
     sender: user.publicKey, 
     senderTokenX: userTokenAccount,
-    //senderTokenSynthX: userTokenAccount, 
+    senderTokenSynthX: wallet_synth_x, 
     tokenProgram: TOKEN_PROGRAM_ID,
     // clock: web3.SYSVAR_CLOCK_PUBKEY,
     receipt: receipt_pda,
@@ -216,6 +228,9 @@ describe("alyra-staking", () => {
     assert.strictEqual(Number(_vaultTokenAccount.value.amount), userAmount);
     let _userTokenAccount = await provider.connection.getTokenAccountBalance(userTokenAccount);
     assert.strictEqual(Number(_userTokenAccount.value.amount), 0);
+    // should have minted x tokens
+    let _userTokenAccountX = await provider.connection.getTokenAccountBalance(wallet_synth_x);
+    assert.strictEqual(Number(_userTokenAccountX.value.amount), userAmount);
 
 
   });
@@ -263,11 +278,11 @@ describe("alyra-staking", () => {
 
     let operation_accounts = { 
       tokenX: mintPubkey,  
-      //syntheticX: synth_x_pda, 
+      syntheticX: synth_x_pda, 
       vaultX: vault_x_pda, 
       sender: user.publicKey, 
       senderTokenX: userTokenAccount,
-      //senderTokenSynthX: userTokenAccount, 
+      senderTokenSynthX: wallet_synth_x, 
       tokenProgram: TOKEN_PROGRAM_ID,
       // clock: web3.SYSVAR_CLOCK_PUBKEY,
       receipt: receipt_pda,
@@ -286,6 +301,10 @@ describe("alyra-staking", () => {
     //assert.ok(Math.abs(Number(_userTokenAccount.value.amount) - (userAmount + 2)) < 2);
     let _vaultTokenAccount = await provider.connection.getTokenAccountBalance(vault_x_pda);
     assert.strictEqual(Number(_vaultTokenAccount.value.amount), 0);
+    // should still get some X (rewards)
+    let _userTokenAccountX = await provider.connection.getTokenAccountBalance(wallet_synth_x);
+    assert.ok(Math.abs(Number(_userTokenAccountX.value.amount)) >= 1);
+    
 
   });
 });
