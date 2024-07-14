@@ -37,7 +37,7 @@ const components: { title: string; href: string; description: string }[] = [
     title: "Pools",
     href: "/pools",
     description:
-      "Home page",
+      "Pools list",
   },
   {
     title: "Leaderboard",
