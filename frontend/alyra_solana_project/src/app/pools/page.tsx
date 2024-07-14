@@ -1,3 +1,5 @@
+"use client"
+
 import { AppHeader } from "@/components/AppHeader/appheader";
 import { PoolsTable } from "@/components/Pools/Pools";
 

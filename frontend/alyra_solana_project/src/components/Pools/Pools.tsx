@@ -15,7 +15,7 @@ export function PoolsTable() {
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
 	const program = useMemo(() => {
-		if (connection) {
+		if (connection && wallet) {
 			return getProgram(connection, wallet as Wallet);
 		}
 	}, [connection, wallet]);
@@ -40,7 +40,7 @@ export function PoolsTable() {
 						yield: /*pool.poolYield*/ 5.9,
 					};
 				});
-				setPools(pools || []);
+				setPools(pools);
 			} catch (error) {
 				console.log("SOMETHING WENT WRONG");
 				console.error(error);
