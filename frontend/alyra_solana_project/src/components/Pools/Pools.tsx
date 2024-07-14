@@ -24,9 +24,9 @@ export function PoolsTable() {
 		if (!program) return;
 		(async () => {
 			try {
-				const allPools = await program?.account.pool.all();
+				const allPools = await program.account.pool.all();
 				console.log(allPools);
-				const pools = allPools?.map((pool) => {
+				const pools = allPools.map((pool) => {
 					console.log(`Pool ${pool}`);
 
 					/**
