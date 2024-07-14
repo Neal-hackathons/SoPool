@@ -6,6 +6,7 @@ skip-lint = false
 
 [programs.localnet]
 so_pool = "J6mPMTYtKxVzxH8EZk5GmjueJd2uXUmymY4eUdXLkFQX"
+alyra_staking2 = "DQ2xiRbRvJuymAZSTj7kd7T8Auagh49NuKv6jS8kpX5c"
 
 [registry]
 url = "https://api.apr.dev"
