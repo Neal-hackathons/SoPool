@@ -25,19 +25,16 @@ export function PoolsTable() {
 		(async () => {
 			try {
 				const allPools = await program.account.pool.all();
-				console.log(allPools);
+				//console.log(allPools);
 				const pools = allPools.map((pool) => {
-					console.log(`Pool ${pool}`);
+					console.log(`Pool ${pool.account.prize}`);
 
-					/**
-					 * TODO:Write mapping code
-					 * to map the data returned by program?.account.pool.all()
-					 * to a Pool type : { pool: string; description: string; yield: number; }
-					 */
 					return {
-						pool: pool.publicKey.toBase58(),
-						description: /*pool.descritpion*/ "Desc",
-						yield: /*pool.poolYield*/ 5.9,
+						pool_addr: pool.publicKey.toBase58(),
+						pool_code: pool.account.name.toString(),
+						description: pool.account.description.toString(),
+						yield: (Math.round(pool.account.poolYield*100))/100,
+						prize: (Math.round(pool.account.prize*100))/100,
 					};
 				});
 				setPools(pools);
@@ -48,16 +45,6 @@ export function PoolsTable() {
 		})();
 	}, [program]);
 
-	//const pools_vect = { Pool : Array(pools.length)};
-	//const pools_vect = new Pool[pools.length];
-	//pools.forEach((pool,index) => {
-	//	const poolElement:Pool = {
-	//		pool: /*pool.name*/ "Sol" ,
-	//		description: /*pool.descritpion*/ "Desc",
-	//		yield: /*pool.poolYield*/ 5.9,
-	//	}
-	//	pools_vect.fill(poolElement);
-	//});
 
 	return (
 		<div className="container mx-auto py-10">

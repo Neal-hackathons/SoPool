@@ -3,7 +3,7 @@ import type { Pool } from "./types"
 
 export const columns: ColumnDef<Pool>[] = [
   {
-    accessorKey: "pool",
+    accessorKey: "pool_code",
     header: "Pool",
   },
   {
