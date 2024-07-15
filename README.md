@@ -1,13 +1,19 @@
+# SoPool
 # AlyraSolanaProject
+
 
 ## Development
 
 ### Frontend
 
+To start development, install dependencies
+
 ```shell
 # ./frontend/alyra_solana_project
 pnpm install
 ```
+
+launch development server, the hot reload is automatic
 
 ```shell
 # ./frontend/alyra_solana_project
