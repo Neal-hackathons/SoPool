@@ -45,7 +45,11 @@ Just push to main or merge pull request into main, if code can build without err
 
 ### Devnet
 
-...TODO...
+command to deploy to devnet
+
+```shell
+anchor deploy
+```
 
 ### Main net
 
