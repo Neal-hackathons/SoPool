@@ -5,12 +5,19 @@
 ### Frontend
 
 ```shell
+# ./frontend/alyra_solana_project
+pnpm install
+```
+
+```shell
+# ./frontend/alyra_solana_project
 pnpm run dev
 ```
 
 ### Build frontend
 
 ```shell
+# ./frontend/alyra_solana_project
 pnpm run build
 ```
 
