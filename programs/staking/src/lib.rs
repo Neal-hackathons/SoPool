@@ -234,7 +234,7 @@ pub struct CreateVault<'info> {
 
 
 #[derive(Accounts)]
-pub struct NewStaker<'info> {
+pub struct NewStaker<'info> {// TODO: could use token pubkey as parameter
     pub token_x: Account<'info, Mint>,
     #[account(init, payer=sender, seeds=[b"receipt", token_x.key().as_ref(), sender.key().as_ref()], bump,space = 8 + 8 +8 + 1)] 
     pub receipt: Account<'info, Receipt>,
