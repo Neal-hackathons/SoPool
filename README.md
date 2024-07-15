@@ -47,7 +47,14 @@ Just push to main or merge pull request into main, if code can build without err
 
 command to deploy to devnet
 
+build 
 ```shell
+# ./programs/<program> 
+anchor build
+```
+
+```shell
+# ./programs/<program>
 anchor deploy
 ```
 
