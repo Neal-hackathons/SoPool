@@ -235,43 +235,7 @@ describe("alyra-staking", () => {
 
   });
 
-  it("Claim Reward", async () => {
-  
 
-
-    //  // stake 3 sec
-    //  let t = 3000;
-    //  let t_s = t/1000;
-    //  while (true) {
-    //    const currentSlot = await program.provider.connection.getSlot()
-    //    const currentBlocktime = await program.provider.connection.getBlockTime(currentSlot)
-    //    console.log(Blocktime);
-    //    console.log(currentBlocktime);
-    //    if (currentBlocktime >= (Blocktime + t_s)) {
-    //       break;
-    //    }
-    //    sleep(t) // sleep 3000ms before checking again
-    // }
-
-
-    // const tx = await program.methods
-    //   .claimReward()
-    //   .accounts({
-    //     user: user.publicKey,
-    //     admin: admin.publicKey,
-    //     userInfo: userInfo.publicKey,
-    //     userStakingWallet: userTokenAccount,
-    //     adminStakingWallet: adminTokenAccount,
-    //     stakingToken: mintPubkey,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //   }).signers([user,admin])
-    //   .rpc();
-    // console.log("Your transaction signature", tx);
-
-    // let _userTokenAccount = await provider.connection.getTokenAccountBalance(userTokenAccount);
-    // //assert.strictEqual(Number(_userTokenAccount.value.amount), 2);
-    // assert.ok(Math.abs(Number(_userTokenAccount.value.amount) - 2) < 2);
-  });
 
   it("Unstake", async () => {
     
