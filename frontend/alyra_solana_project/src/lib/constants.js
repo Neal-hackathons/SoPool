@@ -9,3 +9,7 @@ export const PROGRAM_ID = new PublicKey(
 export const STAKING_PROGRAM_ID = new PublicKey(
   process.env.NEXT_PUBLIC_STAKING_PROGRAM_ID ?? "DQ2xiRbRvJuymAZSTj7kd7T8Auagh49NuKv6jS8kpX5c"
 );
+
+export const LOTTERY_PROGRAM_ID = new PublicKey(
+  process.env.NEXT_PUBLIC_LOTTERY_PROGRAM_ID ?? "J6mPMTYtKxVzxH8EZk5GmjueJd2uXUmymY4eUdXLkFQX"
+)
