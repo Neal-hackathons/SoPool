@@ -15,17 +15,17 @@ import {
   mintToChecked, transferChecked, ASSOCIATED_TOKEN_PROGRAM_ID, getAccount
 } from "@solana/spl-token";
 import { assert } from "chai";
-
-
-
-import { SoPool } from "../target/types/so_pool";
+import { Lottery } from "../target/types/lottery";
 import { Staking } from "../target/types/staking";
+
 describe("so-pool", () => {
   // Configure the client to use the local cluster.
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const program = anchor.workspace.SoPool as Program<SoPool>;
+  // programs
+  const program = anchor.workspace.Lottery as Program<Lottery>;
+
 
   const programStaking = anchor.workspace.staking as Program<Staking>;
 
@@ -34,62 +34,30 @@ describe("so-pool", () => {
   const admin = Keypair.generate();
   const user = Keypair.generate();
   const userB = Keypair.generate();
+
   // token
   let mintPubkey;
+
+  // ATA
   let userTokenAccount: PublicKey;
   let userBTokenAccount: PublicKey;
-
   let lotteryTokenAccount: PublicKey;
   let lotteryTokenAccountX: PublicKey;
-
   let userTokenAccountX: PublicKey;
 
+  // pdas
   let master_pda, mb;
   let lottery_pda, lb;
   let ticket_pda, tb;
   let ticket_pda2, tb2;
   let receipt_pda, rb;
-  let ticketPrice = 1e10;
   let vault_x_pda, vb;
   let synth_x_pda, sb;
 
+  let ticketPrice = 1e10;
+  let lotteryIndex = 1;
 
 
-  // TODO set deadlines
-
-
-  // TODO: add token in lottery struct/PDA
-
-
-
-  // buy tickets with token
-
-  // register deadline reached
-
-  // deposit to staking
-
-  // lottery receipt NewStaker
-
-  // wait
-
-
-    // remove from staking
-
-  // claim input + rewards
-
-
-  // pick winner
-
-
-
-
-
-
-  // winner can claim rewards
-
-  // everybody can refund ticket price
-
-  // quand tout marche, faire des schemas, ajouter des tests, revoir la securité!
 
   before(async () => {
 
@@ -119,7 +87,7 @@ describe("so-pool", () => {
     );
 
 
-    // create token
+    // create lottery token
     mintPubkey = await createMint(
       provider.connection, // connection
       admin, // fee payer
@@ -145,7 +113,7 @@ describe("so-pool", () => {
     );
 
 
-    // mint to user
+    // mint to users
     let txhash = await mintToChecked(
       provider.connection, // connection
       admin, // fee payer
@@ -155,8 +123,6 @@ describe("so-pool", () => {
       1e15, // amount. if your decimals is 8, you mint 10^8 for 1 token.
       8 // decimals
     );
-
-
     let txhash2 = await mintToChecked(
       provider.connection, // connection
       admin, // fee payer
@@ -167,20 +133,22 @@ describe("so-pool", () => {
       8 // decimals
     );
 
-
+    // lottery master PDA
     [master_pda, mb] =
       await PublicKey.findProgramAddress(
         [Buffer.from("master")],
         program.programId
       );
 
+    // lottery 1 PDA
     [lottery_pda, lb] =
       await PublicKey.findProgramAddress(
-        [Buffer.from("lottery"), new BN(1).toArrayLike(Buffer, "le", 4)],
+        [Buffer.from("lottery"), new BN(lotteryIndex).toArrayLike(Buffer, "le", 4)],
         program.programId
       );
 
-      [receipt_pda, rb] = 
+    // lottery staking receipt PDA
+    [receipt_pda, rb] = 
       await PublicKey.findProgramAddress(
         [
           Buffer.from("receipt"), 
@@ -189,15 +157,17 @@ describe("so-pool", () => {
         ],
         programStaking.programId
       );
-  
-      [vault_x_pda, vb] = 
+    
+    // staking vault PDA  
+    [vault_x_pda, vb] = 
       await PublicKey.findProgramAddress(
         [Buffer.from("vault"), mintPubkey.toBuffer()],
         programStaking.programId
       );
   
   
-      [synth_x_pda, sb] = 
+    // staking vault synthetic ATA
+    [synth_x_pda, sb] = 
       await PublicKey.findProgramAddress(
         [Buffer.from("synthetic"), mintPubkey.toBuffer()],
         programStaking.programId
@@ -209,7 +179,7 @@ describe("so-pool", () => {
 
 
 
-  it("Is initialized!", async () => {
+  it("Initialize!", async () => {
 
     // create master PDA
     const tx = await program.methods.initMaster().accounts({
@@ -240,17 +210,31 @@ describe("so-pool", () => {
       .rpc();
     console.log("Your transaction signature", tx2);
 
+    
+    const lottery = await program.account.lottery.fetch(lottery_pda);
+    console.log(lottery);
+    // TODO
+    //assert.strictEqual(lottery.id, 1);
+    // assert.strictEqual(lottery.authority, 1);
+    // assert.strictEqual(lottery.token, 1);
+    // assert.strictEqual(lottery.ticket_price, 1);
+    //assert.strictEqual(lottery.last_ticket_id, 0);
+    // assert.strictEqual(lottery.winner_id, 0);
+    // assert.strictEqual(lottery.claimed, false);
+
+
+
 
 
   });
 
 
-  it("Buy ticket", async () => {
+  it("Buy tickets!", async () => {
 
 
 
     // ticket pda
-    let lotteryId = new anchor.BN(1);
+    let lotteryId = new anchor.BN(lotteryIndex);
     [ticket_pda, tb] =
       await PublicKey.findProgramAddress(
         [Buffer.from("ticket"), lottery_pda.toBuffer(), new BN(1).toArrayLike(Buffer, "le", 4)],
@@ -355,7 +339,19 @@ describe("so-pool", () => {
     let _userBTokenAccount = await provider.connection.getTokenAccountBalance(userBTokenAccount);
     assert.strictEqual(Number(_userBTokenAccount.value.amount), 1e15 - Number(ticketPrice));
 
-    // TODO check tickets exists
+    const ticket1 = await program.account.ticket.fetch(ticket_pda);
+    const ticket2 = await program.account.ticket.fetch(ticket_pda2);
+
+    console.log(ticket1);
+    console.log(ticket2);
+    // assert.strictEqual(lottery.id, 1);
+    // // assert.strictEqual(lottery.authority, 1);
+    // // assert.strictEqual(lottery.token, 1);
+    // // assert.strictEqual(lottery.ticket_price, 1);
+    // assert.strictEqual(lottery.last_ticket_id, 0);
+    // assert.strictEqual(lottery.winner_id, 0);
+    // assert.strictEqual(lottery.claimed, false);
+
 
 
 
@@ -559,6 +555,24 @@ describe("so-pool", () => {
   });
 
   it("everybody can refund", async () => {
+    let tx = await program.methods.refundTicketToken(new anchor.BN(1),new anchor.BN(1)).accounts(
+      {
+        lottery: lottery_pda, 
+        authority:user.publicKey,
+        ticket: ticket_pda,
+        senderTokenX:lotteryTokenAccount,
+        receiverTokenX:userTokenAccount,
+        systemProgram: SystemProgram.programId,
+        token_program: TOKEN_PROGRAM_ID,
+     
+      }
+    )
+        .signers([user])
+        .rpc();
+
+    console.log("Your transaction signature", tx);
+
+    // TODO user B
     
 
   });

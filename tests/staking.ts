@@ -178,7 +178,7 @@ describe("alyra-staking", () => {
 
 
   // create a new staker account for tokenX 
-  let tx0 = await program.methods.newStaker().accounts(
+  let tx0 = await program.methods.newStaker(user.publicKey).accounts(
     {
       tokenX: mintPubkey, 
       receipt: receipt_pda, 
@@ -203,10 +203,12 @@ describe("alyra-staking", () => {
     sender: user.publicKey, 
     senderTokenX: userTokenAccount,
     senderTokenSynthX: wallet_synth_x, 
-    tokenProgram: TOKEN_PROGRAM_ID,
-    // clock: web3.SYSVAR_CLOCK_PUBKEY,
+    tokenProgram: TOKEN_PROGRAM_ID,    
     receipt: receipt_pda,
   }
+
+  console.log(operation_accounts);
+  console.log(userAmount);
 
   // transfer X into program and get X synthetic tokens back 
   
@@ -248,7 +250,6 @@ describe("alyra-staking", () => {
       senderTokenX: userTokenAccount,
       senderTokenSynthX: wallet_synth_x, 
       tokenProgram: TOKEN_PROGRAM_ID,
-      // clock: web3.SYSVAR_CLOCK_PUBKEY,
       receipt: receipt_pda,
     }
 

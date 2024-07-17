@@ -1,4 +1,5 @@
 mod constants;
+mod state;
 mod error;
 
 use anchor_lang::{
@@ -14,26 +15,24 @@ use anchor_spl::{
 use crate::{constants::*, error::LotteryError};
 
 
+
+pub use state::*;
+
+
+
 use staking::program::Staking;
 
 use staking::cpi::accounts::Operation;
-use staking::Receipt;
+pub use staking::Receipt;
 
 //use staking::{self,Receipt};
 
 
 
-
-// new staker
-
-// check all usages of token: lottery and staking and check security and that we can not use another token
-
-
-
-declare_id!("J6mPMTYtKxVzxH8EZk5GmjueJd2uXUmymY4eUdXLkFQX");
+declare_id!("D7ZJp9xHNS9RbaFuyWTiEXB1Ee4L4k4qtYoU9TDg1KUe");
 
 #[program]
-mod so_pool {
+mod lottery {
     use super::*;
     pub fn init_master(_ctx: Context<InitMaster>) -> Result<()> {
         Ok(())
@@ -315,46 +314,44 @@ mod so_pool {
         Ok(())
     }
 
-    pub fn refundTicketToken(ctx: Context<ClaimPrize>, _lottery_id: u32, _ticket_id: u32) -> Result<()> {
+    pub fn refund_ticketToken(ctx: Context<RefundTicketToken>, lottery_id: u32, _ticket_id: u32) -> Result<()> {
+        let lottery = &mut ctx.accounts.lottery;
+        let ticket = &ctx.accounts.ticket;
+        let winner = &ctx.accounts.authority;
 
-        // TODO: refund only 1 time!!!
+  
+        // TODO: handle per ticket isrefunded 
+        let amt: u64 = lottery.ticket_price;
+        // send rewards 
+        let transfer_ctx = CpiContext::new(
+          ctx.accounts.token_program.to_account_info(), 
+          SplTransfer {
+                from: ctx.accounts.sender_token_x.to_account_info().clone(), 
+                to: ctx.accounts.receiver_token_x.to_account_info().clone(),
+                authority: lottery.to_account_info().clone(), 
+            }
+            
+            );
 
-        // let lottery = &mut ctx.accounts.lottery;
-        // let ticket = &ctx.accounts.ticket;
-        // let winner = &ctx.accounts.authority;
+    
+            let bump = ctx.bumps.lottery;
+            let binding = lottery_id.to_le_bytes();
+            let pda_sign = &[
+                b"lottery",
+                binding.as_ref(),
+                &[bump],
+            ];
 
-        // if lottery.claimed {
-        //     return err!(LotteryError::AlreadyClaimed);
-        // }
 
-        // // Validate winner_id
-        // match lottery.winner_id {
-        //     Some(winner_id) => {
-        //         if winner_id != ticket.id {
-        //             return err!(LotteryError::InvalidWinner);
-        //         }
-        //     }
-        //     None => return err!(LotteryError::WinnerNotChosen),
-        // };
+    
+        token::transfer(
+            transfer_ctx.with_signer(&[pda_sign]), 
+            amt
+        )?;
+        
 
-        // // Transfer the prize from Lottery PDA to the winner
-        // let prize = lottery
-        //     .ticket_price
-        //     .checked_mul(lottery.last_ticket_id.into())
-        //     .unwrap();
-
-        // **lottery.to_account_info().try_borrow_mut_lamports()? -= prize;
-        // **winner.to_account_info().try_borrow_mut_lamports()? += prize;
-
-        // lottery.claimed = true;
-
-        // msg!(
-        //     "{} claimed {} lamports from lottery id {} with ticket id {}",
-        //     winner.key(),
-        //     prize,
-        //     lottery.id,
-        //     ticket.id
-        // );
+        msg!(
+            "refunded");
 
         Ok(())
     }
@@ -501,17 +498,6 @@ pub struct CreateLottery<'info> {
     pub system_program: Program<'info, System>,
 }
 
-#[account]
-pub struct Lottery {
-    pub id: u32,
-    pub authority: Pubkey,
-    pub token: Pubkey,
-    pub ticket_price: u64,
-    pub last_ticket_id: u32,
-    //pub winner_id: Option<u32>, // TODO
-    pub winner_id: u32,
-    pub claimed: bool,
-}
 
 #[derive(Accounts)]
 #[instruction(lottery_id: u32)]
@@ -640,6 +626,36 @@ pub struct ClaimPrizeToken<'info> {
     pub sender_token_synth_x: Account<'info, TokenAccount>,  
     #[account(mut)]
     pub receiver_token_synth_x: Account<'info, TokenAccount>,  
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+
+#[derive(Accounts)]
+#[instruction(lottery_id: u32, ticket_id: u32)]
+pub struct RefundTicketToken<'info> {
+    #[account(
+        mut,
+        seeds = [LOTTERY_SEED.as_bytes(), &lottery_id.to_le_bytes()],
+        bump,
+    )]
+    pub lottery: Account<'info, Lottery>,
+    #[account(
+        seeds = [
+            TICKET_SEED.as_bytes(),
+            lottery.key().as_ref(),
+            &ticket_id.to_le_bytes()
+        ],
+        bump,
+        has_one = authority,
+    )]
+    pub ticket: Account<'info, Ticket>,
+    #[account(mut)]
+    pub sender_token_x: Account<'info, TokenAccount>,  
+    #[account(mut)]
+    pub receiver_token_x: Account<'info, TokenAccount>,  
     #[account(mut)]
     pub authority: Signer<'info>,
     pub token_program: Program<'info, Token>,
