@@ -1,13 +1,14 @@
 "use client"
 
 import { AppHeader } from "@/components/AppHeader/appheader";
-import { PoolsTable } from "@/components/Pools/Pools";
+import { LotteriesTable } from "@/components/Lotteries/Lotteries";
 
-export default function Pools() {
+
+export default function Lotteries() {
 	return (
 		<main className="min-h-screen bg-blue-600">
 			<AppHeader />
-			<PoolsTable />
+			<LotteriesTable />
 			<section className="grid">
 				<h1 className="text-1xl  place-self-center">This is the list stored on Solana</h1>
 			</section>

@@ -27,8 +27,8 @@ const components: { title: string; href: string; description: string }[] = [
 		description: "Home page",
 	},
 	{
-		title: "Pools",
-		href: "/pools",
+		title: "Lotteries",
+		href: "/lotteries",
 		description: "Pools",
 	},
 	{
@@ -46,6 +46,9 @@ const components: { title: string; href: string; description: string }[] = [
 export function Navigation() {
 	const wallet = useWallet();
 
+	const isPossibleAdmin =
+		wallet.publicKey?.toString() === process.env.NEXT_PUBLIC_ADMIN_PUBLIC_KEY;
+
 	const isConnected = wallet.connected;
 
 	return (
@@ -57,7 +60,8 @@ export function Navigation() {
 						<ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
 							{components
 								.map((component) => {
-                  if (component.title === "Pools" && !isConnected) return null;
+									if (component.title === "Lotteries" && !isConnected)
+										return null;
 									return (
 										<ListItem
 											key={component.title}
@@ -79,9 +83,9 @@ export function Navigation() {
 						</NavigationMenuLink>
 					</Link>
 					{isConnected && (
-						<Link href="/pools" legacyBehavior passHref>
+						<Link href="/lotteries" legacyBehavior passHref>
 							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-								pools
+								lotteries
 							</NavigationMenuLink>
 						</Link>
 					)}
@@ -90,6 +94,14 @@ export function Navigation() {
 							leaderboard
 						</NavigationMenuLink>
 					</Link>
+
+					{isPossibleAdmin  && (
+						<Link href="/login" legacyBehavior passHref>
+							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+								login
+							</NavigationMenuLink>
+						</Link>
+					)}
 				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>

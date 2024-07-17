@@ -5,12 +5,12 @@ import { DataTable } from "./data-table";
 
 import {  useState, useEffect, useMemo } from "react";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import type { Pool } from "./types";
+import type { Lottery } from "./types";
 import { getProgram } from "../../lib/utils";
 import type { Wallet } from "@project-serum/anchor";
 
-export function PoolsTable() {
-	const [pools, setPools] = useState<Pool[]>([]);
+export function LotteriesTable() {
+	const [lotteries, setLotteries] = useState<Lottery[]>([]);
 
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
@@ -24,20 +24,20 @@ export function PoolsTable() {
 		if (!program) return;
 		(async () => {
 			try {
-				const allPools = await program.account.pool.all();
-				//console.log(allPools);
-				const pools = allPools.map((pool) => {
-					console.log(`Pool ${pool.account.prize}`);
+				const allLotteries = await program.account.pool.all();
+
+				const lotteries = allLotteries.map((lottery) => {
+					console.log(`lottery ${lottery.account.prize}`);
 
 					return {
-						pool_addr: pool.publicKey.toBase58(),
-						pool_code: pool.account.name.toString(),
-						description: pool.account.description.toString(),
-						yield: (Math.round(pool.account.poolYield*100))/100,
-						prize: (Math.round(pool.account.prize*100))/100,
+						lottery_addr: lottery.publicKey.toBase58(),
+						lottery_code: lottery.account.name.toString(),
+						description: lottery.account.description.toString(),
+						yield: (Math.round(lottery.account.poolYield*100))/100,
+						prize: (Math.round(lottery.account.prize*100))/100,
 					};
 				});
-				setPools(pools);
+				setLotteries(lotteries);
 			} catch (error) {
 				console.log("SOMETHING WENT WRONG");
 				console.error(error);
@@ -48,7 +48,7 @@ export function PoolsTable() {
 
 	return (
 		<div className="container mx-auto py-10">
-			<DataTable columns={columns} data={pools} />
+			<DataTable columns={columns} data={lotteries} />
 		</div>
 	);
 }
