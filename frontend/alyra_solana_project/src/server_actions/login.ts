@@ -43,6 +43,6 @@ export async function verifyAdminSignature(
 	} catch (error) {
 		return false;
 	} finally {
-		csrfToken = crypto.randomUUID();
+		csrfToken = crypto.randomUUID().slice(0,10);
 	}
 }
