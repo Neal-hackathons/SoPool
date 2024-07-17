@@ -178,7 +178,7 @@ describe("alyra-staking", () => {
 
 
   // create a new staker account for tokenX 
-  let tx0 = await program.methods.newStaker().accounts(
+  let tx0 = await program.methods.newStaker(user.publicKey).accounts(
     {
       tokenX: mintPubkey, 
       receipt: receipt_pda, 
@@ -203,10 +203,12 @@ describe("alyra-staking", () => {
     sender: user.publicKey, 
     senderTokenX: userTokenAccount,
     senderTokenSynthX: wallet_synth_x, 
-    tokenProgram: TOKEN_PROGRAM_ID,
-    // clock: web3.SYSVAR_CLOCK_PUBKEY,
+    tokenProgram: TOKEN_PROGRAM_ID,    
     receipt: receipt_pda,
   }
+
+  console.log(operation_accounts);
+  console.log(userAmount);
 
   // transfer X into program and get X synthetic tokens back 
   
@@ -235,43 +237,7 @@ describe("alyra-staking", () => {
 
   });
 
-  it("Claim Reward", async () => {
-  
 
-
-    //  // stake 3 sec
-    //  let t = 3000;
-    //  let t_s = t/1000;
-    //  while (true) {
-    //    const currentSlot = await program.provider.connection.getSlot()
-    //    const currentBlocktime = await program.provider.connection.getBlockTime(currentSlot)
-    //    console.log(Blocktime);
-    //    console.log(currentBlocktime);
-    //    if (currentBlocktime >= (Blocktime + t_s)) {
-    //       break;
-    //    }
-    //    sleep(t) // sleep 3000ms before checking again
-    // }
-
-
-    // const tx = await program.methods
-    //   .claimReward()
-    //   .accounts({
-    //     user: user.publicKey,
-    //     admin: admin.publicKey,
-    //     userInfo: userInfo.publicKey,
-    //     userStakingWallet: userTokenAccount,
-    //     adminStakingWallet: adminTokenAccount,
-    //     stakingToken: mintPubkey,
-    //     tokenProgram: TOKEN_PROGRAM_ID,
-    //   }).signers([user,admin])
-    //   .rpc();
-    // console.log("Your transaction signature", tx);
-
-    // let _userTokenAccount = await provider.connection.getTokenAccountBalance(userTokenAccount);
-    // //assert.strictEqual(Number(_userTokenAccount.value.amount), 2);
-    // assert.ok(Math.abs(Number(_userTokenAccount.value.amount) - 2) < 2);
-  });
 
   it("Unstake", async () => {
     
@@ -284,7 +250,6 @@ describe("alyra-staking", () => {
       senderTokenX: userTokenAccount,
       senderTokenSynthX: wallet_synth_x, 
       tokenProgram: TOKEN_PROGRAM_ID,
-      // clock: web3.SYSVAR_CLOCK_PUBKEY,
       receipt: receipt_pda,
     }
 

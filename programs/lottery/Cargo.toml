@@ -1,12 +1,12 @@
 [package]
-name = "so-pool"
+name = "lottery"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "so_pool"
+name = "lottery"
 
 [features]
 default = []

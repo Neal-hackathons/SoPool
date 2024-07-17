@@ -13,23 +13,11 @@ use crate::{error::ErrorCode};
 
 
 //use instructions::*;
-use state::*;
-
-
-// depot n: mint n xtokens
-
-// unstake
-
-// keep some rewards
-
-// redepot: claim (burn + mint new)
-
-// claim
+pub use state::*;
 
 
 
-
-declare_id!("DQ2xiRbRvJuymAZSTj7kd7T8Auagh49NuKv6jS8kpX5c");
+declare_id!("FEYNE1BSyocAfn58PRb1jhQ3NKbm76osSyc9iJDTMDhj");
 
 #[program]
 mod staking {
@@ -47,12 +35,13 @@ mod staking {
 
 
 
-    pub fn new_staker(_ctx: Context<NewStaker>) -> Result<()> {    
+    pub fn new_staker(_ctx: Context<NewStaker>,owner: Pubkey) -> Result<()> {    
         
         Ok(())
     }
 
     pub fn add(ctx: Context<Operation>, deposit_amount: u64) -> Result<()> {    
+
 
         let clock = Clock::get()?;
         let receipt = &mut ctx.accounts.receipt;
@@ -234,9 +223,10 @@ pub struct CreateVault<'info> {
 
 
 #[derive(Accounts)]
-pub struct NewStaker<'info> {// TODO: could use token pubkey as parameter
-    pub token_x: Account<'info, Mint>,
-    #[account(init, payer=sender, seeds=[b"receipt", token_x.key().as_ref(), sender.key().as_ref()], bump,space = 8 + 8 +8 + 1)] 
+#[instruction(owner: Pubkey)]
+pub struct NewStaker<'info> {
+    pub token_x: Account<'info, Mint>,// TODO verify that token_x is same as vault token
+    #[account(init, payer=sender, seeds=[b"receipt", token_x.key().as_ref(), &owner.to_bytes()], bump,space = 8 + 8 +8 + 1)] 
     pub receipt: Account<'info, Receipt>,
     #[account(mut)]
     pub sender: Signer<'info>,
@@ -257,7 +247,6 @@ pub struct Operation<'info> {
     #[account(mut)]
     pub sender_token_synth_x: Account<'info, TokenAccount>,
     pub token_program: Program<'info, Token>,
-    //pub clock: Sysvar<'info, Clock>,
     #[account(mut, seeds=[b"receipt", token_x.key().as_ref(), sender.key().as_ref()], bump)] 
     pub receipt: Account<'info, Receipt>,
 }
@@ -265,3 +254,11 @@ pub struct Operation<'info> {
 
 
 
+
+#[account]
+#[derive(Default)] // will be init to zeros 
+pub struct Receipt {
+    pub is_valid: u8,
+    pub created_ts: u64,
+    pub amount_deposited: u64,
+}
