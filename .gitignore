@@ -6,3 +6,4 @@ node_modules
 test-ledger
 .yarn
 common_wallet_private_key.txt
+common_wallet.json

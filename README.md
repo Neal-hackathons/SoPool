@@ -49,15 +49,24 @@ command to deploy to devnet
 
 build 
 ```shell
-# ./programs/<program> 
+# ./.
 anchor build
 ```
 
 ```shell
-# ./programs/<program>
-anchor deploy
+# ./.
+anchor deploy --provider.cluster devnet --provider.wallet ./common_wallet.json
 ```
 
 ### Main net
 
-...TODO...
+build 
+```shell
+# ./.
+anchor build
+```
+
+```shell
+# ./.
+anchor deploy --provider.cluster mainnet --provider.wallet ./common_wallet.json
+```
