@@ -6,16 +6,18 @@ import { useAdminContext } from "@/contexts/AdminContextProvider";
 import { signedMessageFromWallet } from "@/lib/authentication_functions";
 import { verifyAdminSignature } from "@/server_actions/login";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { PublicKey } from "@solana/web3.js";
 import { redirect } from "next/navigation";
 
 export default function Login() {
 	const { isAdmin, setIsAdmin } = useAdminContext();
+	const wallet = useWallet();
+
+	if (!wallet.connected) redirect("/");
 
 	if (isAdmin) {
 		redirect("/dashboard");
 	}
-
-	const wallet = useWallet();
 
 	return (
 		<main className="min-h-screen bg-blue-600">
@@ -26,11 +28,13 @@ export default function Login() {
 					onClick={async () => {
 						const signedMessage = await signedMessageFromWallet(wallet);
 
-                        if (!signedMessage) return redirect("/")
-                            
-						const isAdmin = await verifyAdminSignature(signedMessage?.toString());
+						if (!signedMessage) return redirect("/");
+						console.log("signedMessage", signedMessage[0]);
 
-						if (isAdmin) alert("works in prod");
+
+						const damn = new TextDecoder().decode(signedMessage);
+
+						const isAdmin = await verifyAdminSignature(damn);
 
 						setIsAdmin(isAdmin);
 

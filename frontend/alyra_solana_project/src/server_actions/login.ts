@@ -9,7 +9,7 @@ const ADMIN_PUBLIC_KEY = process.env.ADMIN_PUBLIC_KEY as string;
 const ADMIN_PUBLIC_KEY_BYTES = new PublicKey(ADMIN_PUBLIC_KEY).toBytes();
 
 export async function serverLogin(): Promise<string> {
-	csrfToken = crypto.randomUUID();
+	csrfToken = crypto.randomUUID().slice(0,10);
 	return csrfToken;
 }
 
@@ -31,9 +31,13 @@ export async function verifyAdminSignature(
 	try {
 		const encodedCRSFToken = new TextEncoder().encode(csrfToken);
 
+		const damn = new TextEncoder().encode(adminSignedMessage);
+
+		console.log("damn!!!!!!!!!!!", damn[0]);
+
 		return sign.detached.verify(
 			encodedCRSFToken,
-			Uint8Array.from(Buffer.from(adminSignedMessage, "hex")), // adminSignedMessage,
+			damn, // adminSignedMessage
 			ADMIN_PUBLIC_KEY_BYTES,
 		);
 	} catch (error) {
