@@ -14,4 +14,8 @@ pub enum LotteryError {
     AlreadyClaimed,
     #[msg("Bad token")]
     BadToken,
+    #[msg("Refunded")]
+    AlreadyRefunded,
+    #[msg("Invalid ticket")]
+    InvalidTicket,
 }

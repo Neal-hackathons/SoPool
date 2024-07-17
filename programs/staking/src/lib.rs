@@ -35,8 +35,10 @@ mod staking {
 
 
 
-    pub fn new_staker(_ctx: Context<NewStaker>,owner: Pubkey) -> Result<()> {    
+    pub fn new_staker(ctx: Context<NewStaker>,owner: Pubkey) -> Result<()> {    
         
+        let receipt = &mut ctx.accounts.receipt;
+        receipt.owner = owner;
         Ok(())
     }
 
@@ -226,8 +228,9 @@ pub struct CreateVault<'info> {
 #[instruction(owner: Pubkey)]
 pub struct NewStaker<'info> {
     pub token_x: Account<'info, Mint>,// TODO verify that token_x is same as vault token
-    #[account(init, payer=sender, seeds=[b"receipt", token_x.key().as_ref(), &owner.to_bytes()], bump,space = 8 + 8 +8 + 1)] 
+    #[account(init, payer=sender, seeds=[b"receipt", token_x.key().as_ref(), &owner.to_bytes()], bump,space = 8 + 8 +8+32 + 1)] 
     pub receipt: Account<'info, Receipt>,
+
     #[account(mut)]
     pub sender: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -261,4 +264,5 @@ pub struct Receipt {
     pub is_valid: u8,
     pub created_ts: u64,
     pub amount_deposited: u64,
+    pub owner: Pubkey,
 }
