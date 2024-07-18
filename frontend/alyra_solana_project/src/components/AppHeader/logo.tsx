@@ -1,15 +1,9 @@
-"use client";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function Logo() {
-	const router = useRouter();
-
 	return (
-		<div
-			className="rounded-3xl bg-yellow-300 p-4 cursor-pointer"
-			onKeyDown={() => router.push("/")}
-		>
+		<Link className="rounded-3xl bg-yellow-300 p-4 cursor-pointer" href={"/"}>
 			SoPool
-		</div>
+		</Link>
 	);
 }
