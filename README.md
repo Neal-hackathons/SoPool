@@ -48,19 +48,28 @@ Just push to main or merge pull request into main, if code can build without err
 
 #### Devnet smart contracts addresses
 
-Lottery: D7ZJp9xHNS9RbaFuyWTiEXB1Ee4L4k4qtYoU9TDg1KUe
+Lottery: ...TO BE UPDATED...
 
-Staking: FEYNE1BSyocAfn58PRb1jhQ3NKbm76osSyc9iJDTMDhj
+Staking: ...TO BE UPDATED...
 
-SoPool: 3attdVJrdoB1J82iRdp3Gpo8KmKUK4R4SB5fzKRLFNpH
+SoPool: ...TO BE UPDATED...
 
 #### Commands to deploy to devnet
 
+Update programs' addresses
+
+```shell
+anchor keys sync
+```
+
 build 
+
 ```shell
 # ./.
 anchor build
 ```
+
+deploy
 
 ```shell
 # ./.
@@ -69,11 +78,21 @@ anchor deploy --provider.cluster devnet --provider.wallet ./common_wallet.json
 
 ### Main net
 
+Update programs' addresses
+
+```shell
+anchor keys sync
+```
+
+
 build 
+
 ```shell
 # ./.
 anchor build
 ```
+
+deploy
 
 ```shell
 # ./.
