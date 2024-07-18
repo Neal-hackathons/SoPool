@@ -37,18 +37,14 @@ export async function verifyAdminSignature(
 	try {
 		const encodedCRSFToken = new TextEncoder().encode(csrfToken);
 
-		const shouldWork = bs58.decode(adminSignedMessage);
+		const uint8SignedMessage = bs58.decode(adminSignedMessage);
 
-		console.log("verifyAdminSignature called");
-
-		console.log("PUBLICKEY BYTES", ADMIN_PUBLIC_KEY_IN_BASE58);
-
-		const adminPublicKeyInBase58 = bs58.decode(ADMIN_PUBLIC_KEY_IN_BASE58);
+		const uint8AdminPublicKey = bs58.decode(ADMIN_PUBLIC_KEY_IN_BASE58);
 
 		return sign.detached.verify(
 			encodedCRSFToken,
-			shouldWork, // adminSignedMessage
-			adminPublicKeyInBase58,
+			uint8SignedMessage, // adminSignedMessage
+			uint8AdminPublicKey,
 		);
 	} catch (error) {
 		return false;
