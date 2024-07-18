@@ -2,15 +2,19 @@
 import { PublicKey } from "@solana/web3.js";
 import { randomBytes } from "node:crypto";
 import { sign } from "tweetnacl";
-import bs58 from "bs58"
+import bs58 from "bs58";
 
 let csrfToken: string | undefined;
 
-const ADMIN_PUBLIC_KEY = process.env.NEXT_PUBLCIC_ADMIN_PUBLIC_KEY as string;
+const ADMIN_PUBLIC_KEY =
+	process.env.NEXT_PUBLIC_ADMIN_PUBLIC_KEY ??
+	"7RTTHKW3xaU99LX8KVZtmVPqzEBiMWxCqGTxgMGjcHV4";
 
-const ADMIN_PUBLIC_KEY_IN_BASE58 = new PublicKey(ADMIN_PUBLIC_KEY).toBase58();
+const ADMIN_PUBLIC_KEY_IN_BASE58 = new PublicKey(
+	ADMIN_PUBLIC_KEY ?? "7RTTHKW3xaU99LX8KVZtmVPqzEBiMWxCqGTxgMGjcHV4",
+).toBase58();
 
-export async function serverLogin(): Promise<string> {
+export async function csrfTokenFromServer(): Promise<string> {
 	csrfToken = randomBytes(32).toString("hex");
 	return csrfToken;
 }
@@ -35,9 +39,9 @@ export async function verifyAdminSignature(
 
 		const shouldWork = bs58.decode(adminSignedMessage);
 
-		console.log("verifyAdminSignature called")
+		console.log("verifyAdminSignature called");
 
-		console.log("PUBLICKEY BYTES", ADMIN_PUBLIC_KEY_IN_BASE58)
+		console.log("PUBLICKEY BYTES", ADMIN_PUBLIC_KEY_IN_BASE58);
 
 		const adminPublicKeyInBase58 = bs58.decode(ADMIN_PUBLIC_KEY_IN_BASE58);
 
@@ -46,7 +50,6 @@ export async function verifyAdminSignature(
 			shouldWork, // adminSignedMessage
 			adminPublicKeyInBase58,
 		);
-
 	} catch (error) {
 		return false;
 	} finally {

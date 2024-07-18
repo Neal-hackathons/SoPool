@@ -7,7 +7,7 @@ import { signedMessageFromWallet } from "@/lib/authentication_functions";
 import { verifyAdminSignature } from "@/server_actions/login";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { redirect } from "next/navigation";
-// import bs58 from "bs58";
+import bs58 from "bs58";
 
 export default function Login() {
 	const { isAdmin, setIsAdmin } = useAdminContext();
@@ -35,13 +35,12 @@ export default function Login() {
 
 						console.log("signedMessage", signedMessage.slice(0, 4));
 
-						// console.log("keyBytes", wallet.publicKey?.toBytes());
+						console.log("keyBytes", wallet.publicKey?.toBytes());
 
-						// const damn = bs58.encode(signedMessage);
+						const damn = bs58.encode(signedMessage);
 
-						// const isAdmin = await verifyAdminSignature(damn);
-						const isAdmin = await verifyAdminSignature("foo");
-
+						const isAdmin = await verifyAdminSignature(damn);
+						
 						setIsAdmin(isAdmin);
 					}}
 				>

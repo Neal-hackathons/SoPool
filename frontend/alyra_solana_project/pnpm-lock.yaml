@@ -35,9 +35,6 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.19.2
         version: 8.19.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      bigint-buffer:
-        specifier: ^1.1.5
-        version: 1.1.5
       bs58:
         specifier: ^6.0.0
         version: 6.0.0
