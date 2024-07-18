@@ -29,7 +29,7 @@ pub use staking::Receipt;
 
 
 
-declare_id!("D7ZJp9xHNS9RbaFuyWTiEXB1Ee4L4k4qtYoU9TDg1KUe");
+declare_id!("2JfVxGG5w5nxPwHKzMdhoewAhxz5Gj9wBKyZSuzQQ4Ye");
 
 #[program]
 mod lottery {
