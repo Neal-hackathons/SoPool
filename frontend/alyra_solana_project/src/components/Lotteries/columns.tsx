@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Lottery } from "../../types/lottery";
+import type { Lottery } from "./types";
 
 export const columns: ColumnDef<Lottery>[] = [
   {

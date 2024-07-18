@@ -5,9 +5,10 @@ import { DataTable } from "./data-table";
 
 import {  useState, useEffect, useMemo } from "react";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import type { Lottery } from "../../types/lottery";
 import { getLotteryProgram/*, getStakingProgram*/ } from "../../lib/utils";
-import type { Wallet } from "@project-serum/anchor";
+import type { Wallet } from "@coral-xyz/anchor";
+import type { Lottery } from "./types";
+
 
 export function LotteriesTable() {
 	const [lotteries, setLotteries] = useState<Lottery[]>([]);
@@ -32,9 +33,9 @@ export function LotteriesTable() {
 						id: lottery.account.id,
 						authority: lottery.publicKey.toBase58(),
 						token: lottery.account.token.toString(),
-						ticket_price: lottery.account.ticket_price,
-						last_ticket_id: lottery.account.last_ticket_id,
-						winner_id: lottery.account.winner_id,
+						ticket_price: lottery.account.ticketPrice,
+						last_ticket_id: lottery.account.lastTicketId,
+						winner_id: lottery.account.winnerId,
 						claimed: lottery.account.claimed,
 					};
 				});
