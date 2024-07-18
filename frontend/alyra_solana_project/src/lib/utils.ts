@@ -1,12 +1,6 @@
-
-
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import {
-	AnchorProvider,
-	Program,
-	type Wallet,
-} from "@project-serum/anchor";
+import { AnchorProvider, Program, type Wallet } from "@coral-xyz/anchor";
 import type { Connection } from "@solana/web3.js";
 
 export function cn(...inputs: ClassValue[]) {
@@ -17,7 +11,8 @@ import IDL_LOTTERY from "../idl/lottery.json";
 //import IDL_STAKING from "./staking.json";
 
 import { STAKING_PROGRAM_ID, LOTTERY_PROGRAM_ID } from "./constants.js";
-import { Lottery } from "../types/lottery";
+import type { Lottery } from "../types/lottery";
+
 
 export const getLotteryProgram = (connection: Connection, wallet: Wallet) => {
 	const provider = new AnchorProvider(connection, wallet, {
