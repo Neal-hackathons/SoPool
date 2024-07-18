@@ -6,8 +6,8 @@ import { useAdminContext } from "@/contexts/AdminContextProvider";
 import { signedMessageFromWallet } from "@/lib/authentication_functions";
 import { verifyAdminSignature } from "@/server_actions/login";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
 import { redirect } from "next/navigation";
+// import bs58 from "bs58";
 
 export default function Login() {
 	const { isAdmin, setIsAdmin } = useAdminContext();
@@ -22,23 +22,27 @@ export default function Login() {
 	return (
 		<main className="min-h-screen bg-blue-600">
 			<AppHeader />
-			<section className="grid">
+			<section className="grid space-y-8">
 				<h1 className="text-7xl  place-self-center">Login as Admin</h1>
-				<Button
+				<Button className="max-w-xs mx-auto"
 					onClick={async () => {
 						const signedMessage = await signedMessageFromWallet(wallet);
 
-						if (!signedMessage) return redirect("/");
-						console.log("signedMessage", signedMessage[0]);
+						if (!signedMessage) {
+							setIsAdmin(false);
+							return;
+						}
 
+						console.log("signedMessage", signedMessage.slice(0, 4));
 
-						const damn = new TextDecoder().decode(signedMessage);
+						// console.log("keyBytes", wallet.publicKey?.toBytes());
 
-						const isAdmin = await verifyAdminSignature(damn);
+						// const damn = bs58.encode(signedMessage);
+
+						// const isAdmin = await verifyAdminSignature(damn);
+						const isAdmin = await verifyAdminSignature("foo");
 
 						setIsAdmin(isAdmin);
-
-						if (isAdmin) redirect("/dashboard");
 					}}
 				>
 					Try to login
