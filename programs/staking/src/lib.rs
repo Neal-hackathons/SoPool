@@ -17,7 +17,7 @@ pub use state::*;
 
 
 
-declare_id!("FEYNE1BSyocAfn58PRb1jhQ3NKbm76osSyc9iJDTMDhj");
+declare_id!("HRij1YGqCYPpPUbEVPpH4qQPJb3gfZosHKuKydDYGqzT");
 
 #[program]
 mod staking {
