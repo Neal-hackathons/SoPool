@@ -6,17 +6,19 @@ import { useAdminContext } from "@/contexts/AdminContextProvider";
 import { signedMessageFromWallet } from "@/lib/authentication_functions";
 import { verifyAdminSignature } from "@/server_actions/login";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { redirect } from "next/navigation";
 import bs58 from "bs58";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
 	const { isAdmin, setIsAdmin } = useAdminContext();
 	const wallet = useWallet();
 
-	if (!wallet.connected) redirect("/");
+	const router = useRouter()
+
+	if (!wallet.connected) router.push("/")
 
 	if (isAdmin) {
-		redirect("/dashboard");
+		router.push("/dashboard")
 	}
 
 	return (
@@ -24,12 +26,14 @@ export default function Login() {
 			<AppHeader />
 			<section className="grid space-y-8">
 				<h1 className="text-7xl  place-self-center">Login as Admin</h1>
-				<Button className="max-w-xs mx-auto"
+				<Button
+					className="max-w-xs mx-auto"
 					onClick={async () => {
 						const signedMessage = await signedMessageFromWallet(wallet);
 
 						if (!signedMessage) {
 							setIsAdmin(false);
+							router.push("/")
 							return;
 						}
 
@@ -40,11 +44,20 @@ export default function Login() {
 						const damn = bs58.encode(signedMessage);
 
 						const isAdmin = await verifyAdminSignature(damn);
-						
+
 						setIsAdmin(isAdmin);
 					}}
 				>
 					Try to login
+				</Button>
+				<Button
+					className="max-w-xs mx-auto"
+					onClick={() => {
+						console.log("foo")
+						router.push("/dashboard")
+					}}
+				>
+					Go to dashboard anyway
 				</Button>
 			</section>
 		</main>
