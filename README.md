@@ -63,6 +63,11 @@ SoPool: ...TO BE UPDATED...
 
 #### Commands to deploy to devnet
 
+
+```shell
+solana config set --url devnet
+```
+
 Update programs' addresses
 
 ```shell

@@ -4,16 +4,20 @@
 resolution = true
 skip-lint = false
 
+[programs.devnet]
+lottery = "2JfVxGG5w5nxPwHKzMdhoewAhxz5Gj9wBKyZSuzQQ4Ye"
+staking = "2X9yDvzea1rfp7NyRn9Fwi9ikhh2ho84pvDJ34GQSvWb"
+
 [programs.localnet]
 so_pool = "J6mPMTYtKxVzxH8EZk5GmjueJd2uXUmymY4eUdXLkFQX"
-alyra_staking2 = "DQ2xiRbRvJuymAZSTj7kd7T8Auagh49NuKv6jS8kpX5c"
+staking = "2X9yDvzea1rfp7NyRn9Fwi9ikhh2ho84pvDJ34GQSvWb"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
-wallet = "~/.config/solana/id.json"
+cluster = "Devnet"
+wallet = "./common_wallet.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
