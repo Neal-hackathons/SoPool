@@ -93,7 +93,7 @@ export function Navigation() {
 					{isPossibleAdmin  && (
 						<Link href="/login" legacyBehavior passHref>
 							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-								dashboard
+								admin
 							</NavigationMenuLink>
 						</Link>
 					)}

@@ -1,6 +1,6 @@
 import { AppHeader } from "@/components/AppHeader/appheader";
 
-export default function Dashboard() {
+export default function Admin() {
 	const lotteriesList = ["Lottery 1", "Lottery 2", "Lottery 3"];
 	return (
 		<main className="min-h-screen h-full bg-blue-600">

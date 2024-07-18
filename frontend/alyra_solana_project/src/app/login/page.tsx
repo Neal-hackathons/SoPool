@@ -18,7 +18,7 @@ export default function Login() {
 	if (!wallet.connected) router.push("/")
 
 	if (isAdmin) {
-		router.push("/dashboard")
+		router.push("/admin")
 	}
 
 	return (
@@ -36,10 +36,6 @@ export default function Login() {
 							router.push("/")
 							return;
 						}
-
-						console.log("signedMessage", signedMessage.slice(0, 4));
-
-						console.log("keyBytes", wallet.publicKey?.toBytes());
 
 						const damn = bs58.encode(signedMessage);
 
