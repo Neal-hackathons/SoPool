@@ -50,15 +50,6 @@ export default function Login() {
 				>
 					Try to login
 				</Button>
-				<Button
-					className="max-w-xs mx-auto"
-					onClick={() => {
-						console.log("foo")
-						router.push("/dashboard")
-					}}
-				>
-					Go to dashboard anyway
-				</Button>
 			</section>
 		</main>
 	);

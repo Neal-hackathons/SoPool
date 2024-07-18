@@ -45,7 +45,14 @@ Just push to main or merge pull request into main, if code can build without err
 
 ### Devnet
 
-command to deploy to devnet
+
+#### Devnet smart contracts addresses
+
+Lottery: D7ZJp9xHNS9RbaFuyWTiEXB1Ee4L4k4qtYoU9TDg1KUe
+Staking: FEYNE1BSyocAfn58PRb1jhQ3NKbm76osSyc9iJDTMDhj
+SoPool: 3attdVJrdoB1J82iRdp3Gpo8KmKUK4R4SB5fzKRLFNpH
+
+#### Commands to deploy to devnet
 
 build 
 ```shell
