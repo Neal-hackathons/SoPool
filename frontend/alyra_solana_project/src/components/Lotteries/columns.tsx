@@ -1,25 +1,29 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Lottery } from "./types";
+import type { Lottery } from "../../types/lottery";
 
 export const columns: ColumnDef<Lottery>[] = [
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "id",
+    header: "Identifier",
   },
 	{
-		accessorKey: "lottery_code",
-		header: "Lottery_code",
+		accessorKey: "token",
+		header: "Token",
 	},
 	{
-		accessorKey: "lottery_addr",
-		header: "Address",
+		accessorKey: "ticket_price",
+		header: "Ticket Price",
 	},
 	{
-		accessorKey: "prize",
-		header: "Prize",
+		accessorKey: "last_ticket_id",
+		header: "Ticket Count",
 	},
 	{
-		accessorKey: "yield",
-		header: "Yield",
+		accessorKey: "winner_id",
+		header: "Winner",
+	},
+	{
+		accessorKey: "claimed",
+		header: "Claimed",
 	},
 ];

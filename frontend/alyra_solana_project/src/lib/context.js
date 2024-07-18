@@ -1,10 +1,12 @@
+"use client";
+
 import { createContext, useState, useEffect, useContext, useMemo } from "react";
 import { SystemProgram } from "@solana/web3.js";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { Keypair } from "@solana/web3.js";
 
 import {
-  getProgram
+  getLotteryProgram, getStakingProgram
 } from "./utils.ts";
 //import { confirmTx, mockWallet } from "../utils/helper";
 
@@ -16,27 +18,33 @@ export const AppProvider = ({ children }) => {
 
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
-  const program = useMemo(() => {
+  const program_lottery = useMemo(() => {
     if (connection) {
-      return getProgram(connection, wallet ?? mockWallet());
+      return getLotteryProgram(connection, wallet ?? mockWallet());
+    }
+  }, [connection, wallet]);
+
+  const program_staking = useMemo(() => {
+    if (connection) {
+      return getStakingProgram(connection, wallet ?? mockWallet());
     }
   }, [connection, wallet]);
 
   useEffect(() => {
-    if(pools.length === 0){
-      viewPools();
+    if(lotteries.length === 0){
+      viewLotteries();
     }
   }, []);
 
-  const [pools, setPools] = useState([]);
+  const [lotteries, setLotteries] = useState([]);
 
-  const viewPools = async () => {
+  const viewLotteries = async () => {
    
-    const pools = await program.account.pool.all();
-    setPools(pools);
+    const lotteries = await program.account.lottery.all();
+    setLotteries(lotteries);
   }
 
-  const createPool = async () => {
+  const createLottery = async () => {
     // TODO 4
     // createVote est la méthode utilisé pour créer un vote à partir du formulaire rempli par l'utilisateur
     // Indice 1 : Aller voir où est appelé cette méthode et les paramètres transmis
@@ -62,10 +70,10 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        createPool,
-        viewPools,
+        createLottery,
+        viewLotteries,
         stake_crypto,
-        pools,
+        lotteries,
         error,
         success
       }}

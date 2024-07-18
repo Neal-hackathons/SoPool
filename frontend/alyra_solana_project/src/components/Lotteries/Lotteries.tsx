@@ -5,8 +5,8 @@ import { DataTable } from "./data-table";
 
 import {  useState, useEffect, useMemo } from "react";
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import type { Lottery } from "./types";
-import { getProgram } from "../../lib/utils";
+import type { Lottery } from "../../types/lottery";
+import { getLotteryProgram/*, getStakingProgram*/ } from "../../lib/utils";
 import type { Wallet } from "@project-serum/anchor";
 
 export function LotteriesTable() {
@@ -16,7 +16,7 @@ export function LotteriesTable() {
 	const wallet = useAnchorWallet();
 	const program = useMemo(() => {
 		if (connection && wallet) {
-			return getProgram(connection, wallet as Wallet);
+			return getLotteryProgram(connection, wallet as Wallet);
 		}
 	}, [connection, wallet]);
 
@@ -24,17 +24,18 @@ export function LotteriesTable() {
 		if (!program) return;
 		(async () => {
 			try {
-				const allLotteries = await program.account.pool.all();
+				const allLotteries = await program.account.lottery.all();
 
 				const lotteries = allLotteries.map((lottery) => {
-					console.log(`lottery ${lottery.account.prize}`);
-
+					
 					return {
-						lottery_addr: lottery.publicKey.toBase58(),
-						lottery_code: lottery.account.name.toString(),
-						description: lottery.account.description.toString(),
-						yield: (Math.round(lottery.account.poolYield*100))/100,
-						prize: (Math.round(lottery.account.prize*100))/100,
+						id: lottery.account.id,
+						authority: lottery.publicKey.toBase58(),
+						token: lottery.account.token.toString(),
+						ticket_price: lottery.account.ticket_price,
+						last_ticket_id: lottery.account.last_ticket_id,
+						winner_id: lottery.account.winner_id,
+						claimed: lottery.account.claimed,
 					};
 				});
 				setLotteries(lotteries);

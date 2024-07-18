@@ -1,10 +1,11 @@
+
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
 	AnchorProvider,
 	Program,
 	type Wallet,
-	type Idl,
 } from "@project-serum/anchor";
 import type { Connection } from "@solana/web3.js";
 
@@ -12,16 +13,27 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
-import IDL from "./idl.json";
-import { POOL_PROGRAM_ID } from "./constants.js";
+import IDL_LOTTERY from "../idl/lottery.json";
+//import IDL_STAKING from "./staking.json";
 
-export const getProgram = (connection: Connection, wallet: Wallet) => {
+import { STAKING_PROGRAM_ID, LOTTERY_PROGRAM_ID } from "./constants.js";
+import { Lottery } from "../types/lottery";
+
+export const getLotteryProgram = (connection: Connection, wallet: Wallet) => {
 	const provider = new AnchorProvider(connection, wallet, {
 		commitment: "confirmed",
 	});
-	const program = new Program(IDL as Idl, POOL_PROGRAM_ID, provider);
+	const program = new Program(IDL_LOTTERY as Lottery, provider);
 	return program;
 };
+
+/*export const getStakingProgram = (connection: Connection, wallet: Wallet) => {
+	const provider = new AnchorProvider(connection, wallet, {
+		commitment: "confirmed",
+	});
+	const program = new Program(IDL_STAKING as Idl, STAKING_PROGRAM_ID, provider);
+	return program;
+};*/
 
 /*export const getVoterAddress = async (votePublicKey, userPublicKey) => {
   return (
