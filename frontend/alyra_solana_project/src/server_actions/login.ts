@@ -35,14 +35,14 @@ export async function verifyAdminSignature(
 	}
 
 	try {
-		const encodedCRSFToken = new TextEncoder().encode(csrfToken);
+		const encodedCSRFToken = new TextEncoder().encode(csrfToken);
 
 		const uint8SignedMessage = bs58.decode(adminSignedMessage);
 
 		const uint8AdminPublicKey = bs58.decode(ADMIN_PUBLIC_KEY_IN_BASE58);
 
 		return sign.detached.verify(
-			encodedCRSFToken,
+			encodedCSRFToken,
 			uint8SignedMessage, // adminSignedMessage
 			uint8AdminPublicKey,
 		);
