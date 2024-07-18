@@ -13,6 +13,13 @@ To start development, install dependencies
 pnpm install
 ```
 
+fill environment variables
+
+```shell
+# ./frontend/alyra_solana_project
+cp .env.example .env
+```
+
 launch development server, the hot reload is automatic
 
 ```shell
