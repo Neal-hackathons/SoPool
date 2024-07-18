@@ -197,12 +197,29 @@ describe("so-pool", () => {
 
   it("Create lottery!", async () => {
 
+    // create staking vault
+    const tx0 = await programStaking.methods.initialize().accounts({
+      syntheticX: synth_x_pda,
+      vaultX: vault_x_pda, 
+      tokenX: mintPubkey,         
+      payer: admin.publicKey, 
+      systemProgram: SystemProgram.programId,
+      tokenProgram: TOKEN_PROGRAM_ID, 
+      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID, 
+      //rent: SYSVAR_RENT_PUBKEY
+      })
+      //.signers([admin, poolInfo])
+      .signers([admin])
+      .rpc();
+    console.log("Your transaction signature", tx0);
 
     // create lottery
     const tx2 = await program.methods.createLottery(new anchor.BN(ticketPrice)).accounts({
       lottery: lottery_pda,
       master: master_pda,
       authority: admin.publicKey,
+      mint:mintPubkey,
+      vaultX:vault_x_pda,
       systemProgram: SystemProgram.programId,
     })
 
@@ -362,24 +379,7 @@ describe("so-pool", () => {
 
   it("Deposit staking", async () => {
   
-    // create staking vault
-    const tx0 = await programStaking.methods.initialize().accounts({
-      syntheticX: synth_x_pda,
-      vaultX: vault_x_pda, 
-      tokenX: mintPubkey,         
-      payer: admin.publicKey, 
-      systemProgram: SystemProgram.programId,
-      tokenProgram: TOKEN_PROGRAM_ID, 
-      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID, 
-      //rent: SYSVAR_RENT_PUBKEY
-      })
-      //.signers([admin, poolInfo])
-      .signers([admin])
-      .rpc();
 
-
- 
-  console.log("Your transaction signature", tx0);
 
  
     let tx1 = await programStaking.methods.newStaker(lottery_pda).accounts(
@@ -440,9 +440,10 @@ describe("so-pool", () => {
     }
 
 
-    let tx = await program.methods.depositToStaking(new anchor.BN(2*ticketPrice),new anchor.BN(1)).accounts(
+    let tx = await program.methods.depositToStaking(new anchor.BN(lotteryIndex)).accounts(
       {
         lottery: lottery_pda, 
+        authority:admin.publicKey,
         tokenX: mintPubkey, 
         synthXMint: synth_x_pda, 
         vaultX:vault_x_pda,
@@ -453,7 +454,7 @@ describe("so-pool", () => {
         token_program: TOKEN_PROGRAM_ID,
       }
     )
-        .signers([])
+        .signers([admin])
         .rpc();
     console.log("Your transaction signature", tx);
 
@@ -484,6 +485,7 @@ describe("so-pool", () => {
     let tx = await program.methods.removeFromStaking(new anchor.BN(1)).accounts(
       {
         lottery: lottery_pda, 
+        authority:admin.publicKey,
         tokenX: mintPubkey, 
         synthXMint: synth_x_pda, 
         vaultX:vault_x_pda,
@@ -494,7 +496,7 @@ describe("so-pool", () => {
         token_program: TOKEN_PROGRAM_ID,
       }
     )
-        .signers([])
+        .signers([admin])
         .rpc();
     console.log("Your transaction signature", tx);
 
@@ -515,7 +517,7 @@ describe("so-pool", () => {
 
   it("pick winner", async () => {
 
-    let tx = await program.methods.pickWinner(new anchor.BN(1)).accounts(
+    let tx = await program.methods.pickWinner(new anchor.BN(lotteryIndex)).accounts(
       {
         lottery: lottery_pda, 
         authority:admin.publicKey,
