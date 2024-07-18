@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AppWalletProvider from "@/contexts/AppWalletProvider";
+import AdminContextProvider from "@/contexts/AdminContextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,9 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className="min-h-screen h-full">
-				<AppWalletProvider>{children}</AppWalletProvider>
+				<AppWalletProvider>
+					<AdminContextProvider>{children}</AdminContextProvider>
+				</AppWalletProvider>
 			</body>
 		</html>
 	);
