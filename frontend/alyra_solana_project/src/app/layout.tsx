@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppWalletProvider from "@/contexts/AppWalletProvider";
 import AdminContextProvider from "@/contexts/AdminContextProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,10 @@ export default function RootLayout({
 		<html lang="en">
 			<body className="min-h-screen h-full">
 				<AppWalletProvider>
-					<AdminContextProvider>{children}</AdminContextProvider>
+					<AdminContextProvider>
+						{children}
+						<Toaster />
+					</AdminContextProvider>
 				</AppWalletProvider>
 			</body>
 		</html>

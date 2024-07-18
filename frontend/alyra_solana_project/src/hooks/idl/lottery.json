@@ -1,0 +1,820 @@
+{
+  "address": "2JfVxGG5w5nxPwHKzMdhoewAhxz5Gj9wBKyZSuzQQ4Ye",
+  "metadata": {
+    "name": "lottery",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "buy_ticket",
+      "discriminator": [
+        11,
+        24,
+        17,
+        193,
+        168,
+        116,
+        164,
+        169
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lottery_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "buyer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "lottery_id",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "buy_ticket_with_token",
+      "discriminator": [
+        155,
+        182,
+        225,
+        160,
+        8,
+        46,
+        226,
+        131
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lottery_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "writable": true
+        },
+        {
+          "name": "lottery_token_account",
+          "writable": true
+        },
+        {
+          "name": "buyer_token_account",
+          "writable": true
+        },
+        {
+          "name": "buyer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "lottery_id",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "claim_prizeToken",
+      "discriminator": [
+        205,
+        10,
+        121,
+        45,
+        57,
+        7,
+        18,
+        81
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lottery_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "lottery"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "sender_token_synth_x",
+          "writable": true
+        },
+        {
+          "name": "receiver_token_synth_x",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "lottery_id",
+          "type": "u32"
+        },
+        {
+          "name": "_ticket_id",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "create_lottery",
+      "discriminator": [
+        242,
+        165,
+        247,
+        119,
+        17,
+        203,
+        21,
+        42
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true
+        },
+        {
+          "name": "master",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  115,
+                  116,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "depositToStaking",
+      "discriminator": [
+        218,
+        232,
+        61,
+        107,
+        58,
+        0,
+        82,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lottery_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_x",
+          "writable": true
+        },
+        {
+          "name": "synth_x_mint",
+          "writable": true
+        },
+        {
+          "name": "vault_x",
+          "writable": true
+        },
+        {
+          "name": "sender_token_synth_x",
+          "writable": true
+        },
+        {
+          "name": "sender_token_x",
+          "writable": true
+        },
+        {
+          "name": "receipt",
+          "writable": true
+        },
+        {
+          "name": "staking_program",
+          "address": "2X9yDvzea1rfp7NyRn9Fwi9ikhh2ho84pvDJ34GQSvWb"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "lottery_id",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "init_master",
+      "discriminator": [
+        168,
+        49,
+        22,
+        248,
+        228,
+        56,
+        111,
+        24
+      ],
+      "accounts": [
+        {
+          "name": "master",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  115,
+                  116,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "pick_winner",
+      "discriminator": [
+        227,
+        62,
+        25,
+        73,
+        132,
+        106,
+        68,
+        96
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lottery_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "lottery"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "_lottery_id",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "refund_ticketToken",
+      "discriminator": [
+        178,
+        187,
+        224,
+        1,
+        130,
+        30,
+        199,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lottery_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "lottery"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "sender_token_x",
+          "writable": true
+        },
+        {
+          "name": "receiver_token_x",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "lottery_id",
+          "type": "u32"
+        },
+        {
+          "name": "_ticket_id",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "removeFromStaking",
+      "discriminator": [
+        254,
+        63,
+        212,
+        44,
+        222,
+        250,
+        243,
+        222
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lottery_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_x",
+          "writable": true
+        },
+        {
+          "name": "synth_x_mint",
+          "writable": true
+        },
+        {
+          "name": "vault_x",
+          "writable": true
+        },
+        {
+          "name": "sender_token_synth_x",
+          "writable": true
+        },
+        {
+          "name": "sender_token_x",
+          "writable": true
+        },
+        {
+          "name": "receipt",
+          "writable": true
+        },
+        {
+          "name": "staking_program",
+          "address": "2X9yDvzea1rfp7NyRn9Fwi9ikhh2ho84pvDJ34GQSvWb"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "lottery_id",
+          "type": "u32"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Lottery",
+      "discriminator": [
+        162,
+        182,
+        26,
+        12,
+        164,
+        214,
+        112,
+        3
+      ]
+    },
+    {
+      "name": "Master",
+      "discriminator": [
+        168,
+        213,
+        193,
+        12,
+        77,
+        162,
+        58,
+        235
+      ]
+    },
+    {
+      "name": "Receipt",
+      "discriminator": [
+        39,
+        154,
+        73,
+        106,
+        80,
+        102,
+        145,
+        153
+      ]
+    },
+    {
+      "name": "Ticket",
+      "discriminator": [
+        41,
+        228,
+        24,
+        165,
+        78,
+        90,
+        235,
+        200
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "WinnerAlreadyExists",
+      "msg": "Winner already exists."
+    },
+    {
+      "code": 6001,
+      "name": "NoTickets",
+      "msg": "Can't choose a winner when there are no tickets."
+    },
+    {
+      "code": 6002,
+      "name": "WinnerNotChosen",
+      "msg": "Winner has not been chosen."
+    },
+    {
+      "code": 6003,
+      "name": "InvalidWinner",
+      "msg": "Invalid winner."
+    },
+    {
+      "code": 6004,
+      "name": "AlreadyClaimed",
+      "msg": "The prize has already been claimed."
+    },
+    {
+      "code": 6005,
+      "name": "BadToken",
+      "msg": "Bad token"
+    }
+  ],
+  "types": [
+    {
+      "name": "Lottery",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "token",
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket_price",
+            "type": "u64"
+          },
+          {
+            "name": "last_ticket_id",
+            "type": "u32"
+          },
+          {
+            "name": "winner_id",
+            "type": "u32"
+          },
+          {
+            "name": "claimed",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Master",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "last_id",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Receipt",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "is_valid",
+            "type": "u8"
+          },
+          {
+            "name": "created_ts",
+            "type": "u64"
+          },
+          {
+            "name": "amount_deposited",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Ticket",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "lottery_id",
+            "type": "u32"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    }
+  ]
+}
