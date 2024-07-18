@@ -1,3 +1,4 @@
+"use client"
 import { ConnectWallet } from "./connectWallet";
 import { Logo } from "./logo";
 import { Navigation } from "./navigation";

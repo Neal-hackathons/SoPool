@@ -22,11 +22,6 @@ const components: { title: string; href: string; description: string }[] = [
 		description: "Home page",
 	},
 	{
-		title: "Home",
-		href: "/",
-		description: "Home page",
-	},
-	{
 		title: "Lotteries",
 		href: "/lotteries",
 		description: "Pools",
@@ -98,7 +93,7 @@ export function Navigation() {
 					{isPossibleAdmin  && (
 						<Link href="/login" legacyBehavior passHref>
 							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-								login
+								dashboard
 							</NavigationMenuLink>
 						</Link>
 					)}
