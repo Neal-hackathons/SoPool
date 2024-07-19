@@ -7,6 +7,7 @@ import LotteryIDL from "./idl/lottery.json";
 import { useAnchorProvider } from "./useAnchorProvider";
 import { PublicKey } from "@solana/web3.js";
 import { useToast } from "@/components/ui/use-toast";
+import { LOTTERY_SEED, MASTER_SEED } from "./static_seeds";
 
 
 type CreateLotteryArgs = {
@@ -54,7 +55,7 @@ export function getLotteryProgram(provider: AnchorProvider) {
 	return new Program(LotteryIDL as Lottery, provider);
 }
 
-export function useLotteryProgram(account: PublicKey ) {
+export function useLotteryProgram(authorityPublicKey: PublicKey ) {
 	const { connection } = useConnection();
 
 	const { toast } = useToast();
@@ -67,20 +68,26 @@ export function useLotteryProgram(account: PublicKey ) {
 		return connection.getParsedAccountInfo(LOTTERY_PROGRAM_ID);
 	};
 
-	const initialize = async () => {
+	const initialize = () => {
 		lotteryProgram.methods.initMaster().rpc();
 	};
 
-	const createLottery = async (lotteryArgs: CreateLotteryArgs) => {
-		const createdLotteryPDAAddress = PublicKey.createProgramAddressSync(
-			[Buffer.from(lotteryArgs.lotteryName), account.toBuffer()],
+	const createLottery =  () => {
+		const masterPDAAddress = PublicKey.createProgramAddressSync(
+			[Buffer.from(MASTER_SEED)],
+			LOTTERY_PROGRAM_ID
+		)
+
+		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
+			[Buffer.from(LOTTERY_SEED)],
 			LOTTERY_PROGRAM_ID
 		)
 
 		lotteryProgram.methods
 			.createLottery([])
 			.accounts({
-				lottery: createdLotteryPDAAddress
+				lottery: lotteryPDAAddress,
+				authority: authorityPublicKey,
 			})
 			.rpc();
 	};
@@ -88,10 +95,7 @@ export function useLotteryProgram(account: PublicKey ) {
 	const buyTicketWithToken = () => {};
 
 	const depositToStaking = async () => {
-		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
-			[Buffer.from("lottery"), account.toBuffer()],
-			LOTTERY_PROGRAM_ID
-		)
+
 	};
 
 	const removeFromStaking = () => {};
