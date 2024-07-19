@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { AnchorProvider, Program, type Wallet } from "@coral-xyz/anchor";
-import type { Connection } from "@solana/web3.js";
+import type { Connection, Transaction } from "@solana/web3.js";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -21,6 +21,15 @@ export const getLotteryProgram = (connection: Connection, wallet: Wallet) => {
 	const program = new Program(IDL_LOTTERY as Lottery, provider);
 	return program;
 };
+
+export const confirmTx = async (txHash:any, connection: Connection) => {
+	const blockhashInfo = await connection.getLatestBlockhash();
+	await connection.confirmTransaction({
+	  blockhash: blockhashInfo.blockhash,
+	  lastValidBlockHeight: blockhashInfo.lastValidBlockHeight,
+	  signature: txHash,
+	});
+  };
 
 /*export const getStakingProgram = (connection: Connection, wallet: Wallet) => {
 	const provider = new AnchorProvider(connection, wallet, {

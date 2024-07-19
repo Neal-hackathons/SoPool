@@ -1,14 +1,9 @@
 "use client";
 
 import { AppHeader } from "@/components/AppHeader/appheader";
+import { InitMaster } from "@/components/Admin/admin";
 import { Button } from "@/components/ui/button";
-import { useAdminContext } from "@/contexts/AdminContextProvider";
-import { useWallet } from "@solana/wallet-adapter-react";
 
-function initMaster () {
-	
-
-}
 
 export default function Admin() {
 	const lotteriesList = ["Lottery 1", "Lottery 2", "Lottery 3"];
@@ -16,13 +11,7 @@ export default function Admin() {
 		<main className="min-h-screen h-full bg-blue-600">
 			<AppHeader />
 			<section className="grid mx-auto">
-				<Button	className="max-w-xs mx-auto"
-						onClick={async () => {
-							initMaster();
-						}}
-					>
-					Init Master (once)
-				</Button>
+				<InitMaster/>
 			</section>
 			<section className="grid mx-auto">
 				<section className="grid grid-cols-3 mx-auto gap-2">
