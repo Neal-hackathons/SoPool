@@ -9,10 +9,9 @@ import { PublicKey } from "@solana/web3.js";
 import { useToast } from "@/components/ui/use-toast";
 import { LOTTERY_SEED, MASTER_SEED } from "./static_seeds";
 
-
 type CreateLotteryArgs = {
 	lotteryName: string;
-	owner: PublicKey
+	owner: PublicKey;
 };
 
 type BuyTicketWithTokenArgs = {
@@ -20,7 +19,7 @@ type BuyTicketWithTokenArgs = {
 };
 
 type DepositToStakingArgs = {
-	amount: number,
+	amount: number;
 	lottery_id: number;
 };
 
@@ -30,7 +29,7 @@ type RemoveFromStakingArgs = {
 
 type BuyTicketArgs = {
 	lottery_id: number;
-}
+};
 
 type PickWinnerArgs = {
 	lottery_id: number;
@@ -39,7 +38,7 @@ type PickWinnerArgs = {
 type ClaimPrizeArgs = {
 	lottery_id: number;
 	ticket_id: number;
-}
+};
 
 type ClaimPrizeTokenArgs = {
 	lottery_id: number;
@@ -55,7 +54,7 @@ export function getLotteryProgram(provider: AnchorProvider) {
 	return new Program(LotteryIDL as Lottery, provider);
 }
 
-export function useLotteryProgram(authorityPublicKey: PublicKey ) {
+export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	const { connection } = useConnection();
 
 	const { toast } = useToast();
@@ -72,16 +71,32 @@ export function useLotteryProgram(authorityPublicKey: PublicKey ) {
 		lotteryProgram.methods.initMaster().rpc();
 	};
 
-	const createLottery =  () => {
+	const depositToStaking = () => {
+		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
+			[Buffer.from(LOTTERY_SEED)],
+			LOTTERY_PROGRAM_ID,
+		);
+
+		lotteryProgram.methods
+			.depositToStaking([])
+			.accounts({
+				lottery: lotteryPDAAddress,
+				receipt
+				authority: authorityPublicKey,
+			})
+			.rpc();
+	};
+
+	const createLottery = () => {
 		const masterPDAAddress = PublicKey.createProgramAddressSync(
 			[Buffer.from(MASTER_SEED)],
-			LOTTERY_PROGRAM_ID
-		)
+			LOTTERY_PROGRAM_ID,
+		);
 
 		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
 			[Buffer.from(LOTTERY_SEED)],
-			LOTTERY_PROGRAM_ID
-		)
+			LOTTERY_PROGRAM_ID,
+		);
 
 		lotteryProgram.methods
 			.createLottery([])
@@ -93,10 +108,6 @@ export function useLotteryProgram(authorityPublicKey: PublicKey ) {
 	};
 
 	const buyTicketWithToken = () => {};
-
-	const depositToStaking = async () => {
-
-	};
 
 	const removeFromStaking = () => {};
 
