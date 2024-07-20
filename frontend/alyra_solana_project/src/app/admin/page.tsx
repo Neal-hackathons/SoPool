@@ -3,7 +3,7 @@
 import { AppHeader } from "@/components/AppHeader/appheader";
 import { InitMaster, CreateLossLottery } from "@/components/Admin/admin";
 import { Button } from "@/components/ui/button";
-import { LotteriesTable } from "@/components/Lotteries/Lotteries";
+import { AdminLotteriesTable } from "@/components/Lotteries/Lotteries";
 
 
 export default function Admin() {
@@ -17,7 +17,7 @@ export default function Admin() {
 				<CreateLossLottery/>
 			</section>
 			<section className="grid mx-auto">
-				<LotteriesTable/>
+				<AdminLotteriesTable/>
 			</section>
 			<section className="grid mx-auto">
 				<section className="grid grid-cols-3 mx-auto gap-2">
