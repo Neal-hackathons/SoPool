@@ -80,12 +80,14 @@ SoPool: ...TO BE UPDATED...
 
 
 ```shell
+# ./.
 solana config set --url devnet
 ```
 
 Update programs' addresses
 
 ```shell
+# ./.
 anchor keys sync
 ```
 
@@ -108,6 +110,7 @@ anchor deploy --provider.cluster devnet --provider.wallet ./common_wallet.json
 Update programs' addresses
 
 ```shell
+# ./.
 anchor keys sync
 ```
 
