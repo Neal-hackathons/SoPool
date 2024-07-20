@@ -12,4 +12,5 @@ export const LOTTERY_PROGRAM_ID = new PublicKey(
 
 export const MASTER_SEED = "master";
 export const LOTTERY_SEED = "lottery";
+export const TICKET_SEED = "ticket";
 
