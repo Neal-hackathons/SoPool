@@ -84,8 +84,6 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	// RPC connection related code
 	const { connection } = useConnection();
 
-	const { toast } = useToast();
-
 	const provider = useAnchorProvider();
 
 	const lotteryProgram = getLotteryProgram(provider);
@@ -103,20 +101,17 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 		LOTTERY_PROGRAM_ID,
 	);
 
-	const [masterAccount, setMasterAccount] = useState<{lastId: number}>({lastId: 0});
-
-	useEffect(() => {
-		(async () => {
-			const masterAccount = await lotteryProgram.account.master.fetch(masterAccountPublicKey);
-			setMasterAccount(masterAccount);
-		})();
-	},[lotteryProgram.account.master.fetch, masterAccountPublicKey]);
-
+	// Functions to call the smart contract
 	const initialize = () => {
 		return lotteryProgram.methods.initMaster().rpc();
 	};
 
-	const depositToStaking = (amount: number, lotteryID: number) => {
+	const depositToStaking = async (amount: number, lotteryID: number) => {
+		//! Needs to be refetched ... EVERY. TIME.
+		const masterAccount = await lotteryProgram.account.master.fetch(
+			masterAccountPublicKey,
+		);
+
 		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
 			[Buffer.from(LOTTERY_SEED), new Uint8Array([masterAccount.lastId])],
 			LOTTERY_PROGRAM_ID,
@@ -133,21 +128,16 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 				senderTokenX: new PublicKey(""),
 			})
 			.rpc();
-
-		// lotteryProgram.methods
-		// 	.depositToStaking([])
-		// 	.accounts({
-		// 		lottery: lotteryPDAAddress,
-		// 		receipt
-		// 		authority: authorityPublicKey,
-		// 	})
-		// 	.rpc();
 	};
 
-	const createLottery = () => {
+	const createLottery = async () => {
+		//! Needs to be refetched ... EVERY. TIME.
+		const masterAccount = await lotteryProgram.account.master.fetch(
+			masterAccountPublicKey,
+		);
 
 		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
-			[Buffer.from(LOTTERY_SEED)],
+			[Buffer.from(LOTTERY_SEED), new Uint8Array([masterAccount.lastId])],
 			LOTTERY_PROGRAM_ID,
 		);
 
