@@ -96,10 +96,11 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	// TODO : figure out if we need this
 	const mintPublicKey = useMintPublicKey(authorityPublicKey);
 
-	const masterAccountPublicKey = PublicKey.createProgramAddressSync(
-		[Buffer.from(MASTER_SEED)],
-		LOTTERY_PROGRAM_ID,
-	);
+	const [masterAccountPDAPublicKey, _masterAccountBump] =
+		PublicKey.findProgramAddressSync(
+			[Buffer.from(MASTER_SEED)],
+			LOTTERY_PROGRAM_ID,
+		);
 
 	// Functions to call the smart contract
 	const initialize = () => {
@@ -109,10 +110,10 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	const depositToStaking = async (amount: number, lotteryID: number) => {
 		//! Needs to be refetched ... EVERY. TIME.
 		const masterAccount = await lotteryProgram.account.master.fetch(
-			masterAccountPublicKey,
+			masterAccountPDAPublicKey,
 		);
 
-		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
+		const lotteryPDAAddress = PublicKey.findProgramAddressSync(
 			[Buffer.from(LOTTERY_SEED), new Uint8Array([masterAccount.lastId])],
 			LOTTERY_PROGRAM_ID,
 		);
@@ -133,10 +134,10 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	const createLottery = async () => {
 		//! Needs to be refetched ... EVERY. TIME.
 		const masterAccount = await lotteryProgram.account.master.fetch(
-			masterAccountPublicKey,
+			masterAccountPDAPublicKey,
 		);
 
-		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
+		const [lotteryPDAAddress, _lotteryPDAAddressBump] = PublicKey.findProgramAddressSync(
 			[Buffer.from(LOTTERY_SEED), new Uint8Array([masterAccount.lastId])],
 			LOTTERY_PROGRAM_ID,
 		);
