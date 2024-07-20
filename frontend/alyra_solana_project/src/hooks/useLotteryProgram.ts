@@ -80,9 +80,6 @@ export function useMintPublicKey(authorityPublicKey: PublicKey) {
 	return mintPublicKey;
 }
 
-
-
-
 export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	// RPC connection related code
 	const { connection } = useConnection();
@@ -101,18 +98,19 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	// TODO : figure out if we need this
 	const mintPublicKey = useMintPublicKey(authorityPublicKey);
 
-	const masterAccountPublicKey = PublicKey.createProgramAddressSync([Buffer.from(MASTER_SEED)],LOTTERY_PROGRAM_ID)
+	const masterAccountPublicKey = PublicKey.createProgramAddressSync(
+		[Buffer.from(MASTER_SEED)],
+		LOTTERY_PROGRAM_ID,
+	);
 
-	// const [masterAccount, setMasterAccount] = useState<{lastId: number}>({lastId: 0});
+	const [masterAccount, setMasterAccount] = useState<{lastId: number}>({lastId: 0});
 
-	// useEffect(() => {
-	// 	(async () => {
-	// 		const masterAccount = await lotteryProgram.account.master.fetch(masterAccountPublicKey);
-	// 		setMasterAccount(masterAccount);
-	// 	})();
-	// },[lotteryProgram.account.master.fetch, masterAccountPublicKey]);
-
-
+	useEffect(() => {
+		(async () => {
+			const masterAccount = await lotteryProgram.account.master.fetch(masterAccountPublicKey);
+			setMasterAccount(masterAccount);
+		})();
+	},[lotteryProgram.account.master.fetch, masterAccountPublicKey]);
 
 	const initialize = () => {
 		return lotteryProgram.methods.initMaster().rpc();
@@ -120,7 +118,7 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 
 	const depositToStaking = (amount: number, lotteryID: number) => {
 		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
-			[Buffer.from(LOTTERY_SEED)],
+			[Buffer.from(LOTTERY_SEED), new Uint8Array([masterAccount.lastId])],
 			LOTTERY_PROGRAM_ID,
 		);
 
@@ -147,10 +145,6 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 	};
 
 	const createLottery = () => {
-		const masterPDAAddress = PublicKey.createProgramAddressSync(
-			[Buffer.from(MASTER_SEED)],
-			LOTTERY_PROGRAM_ID,
-		);
 
 		const lotteryPDAAddress = PublicKey.createProgramAddressSync(
 			[Buffer.from(LOTTERY_SEED)],
@@ -158,9 +152,8 @@ export function useLotteryProgram(authorityPublicKey: PublicKey) {
 		);
 
 		lotteryProgram.methods
-			.createLottery()
+			.createLottery(new BN(42))
 			.accounts({
-				master: masterAccount,
 				lottery: lotteryPDAAddress,
 				authority: authorityPublicKey,
 			})
