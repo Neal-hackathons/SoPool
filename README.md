@@ -34,13 +34,28 @@ pnpm run dev
 pnpm run build
 ```
 
-### Tests
+### Tests (local)
 
-To launch the tests, run:
+To launch the tests locally, run:
 
 ```shell
 # ./.
-anchor test
+solana config set --url localhost
+```
+
+```shell
+# ./.
+solana airdrop -k ./common_wallet.json 100
+```
+
+```shell
+# ./.
+yarn install
+```
+
+```shell
+# ./.
+anchor test --provider.cluster localnet
 ```
 
 
