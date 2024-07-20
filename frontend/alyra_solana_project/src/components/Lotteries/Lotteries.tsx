@@ -3,48 +3,43 @@
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
-import {  useState, useEffect, useMemo } from "react";
-import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import { useState, useEffect } from "react";
 import type { Lottery } from "./types";
-import { getProgram } from "../../lib/utils";
-import type { Wallet } from "@project-serum/anchor";
+
+import { useAnchorProvider } from "@/hooks/useAnchorProvider";
+import { getLotteryProgram } from "@/hooks/useLotteryProgram";
 
 export function LotteriesTable() {
 	const [lotteries, setLotteries] = useState<Lottery[]>([]);
 
-	const { connection } = useConnection();
-	const wallet = useAnchorWallet();
-	const program = useMemo(() => {
-		if (connection && wallet) {
-			return getProgram(connection, wallet as Wallet);
-		}
-	}, [connection, wallet]);
+	const provider = useAnchorProvider();
+
+	const lotteryProgram = getLotteryProgram(provider);
 
 	useEffect(() => {
-		if (!program) return;
 		(async () => {
 			try {
-				const allLotteries = await program.account.pool.all();
+				const allLotteries = await lotteryProgram.account.lottery.all();
 
 				const lotteries = allLotteries.map((lottery) => {
-					console.log(`lottery ${lottery.account.prize}`);
-
 					return {
-						lottery_addr: lottery.publicKey.toBase58(),
-						lottery_code: lottery.account.name.toString(),
-						description: lottery.account.description.toString(),
-						yield: (Math.round(lottery.account.poolYield*100))/100,
-						prize: (Math.round(lottery.account.prize*100))/100,
+						id: lottery.account.id,
+						authority: lottery.account.authority,
+						token: lottery.account.token,
+						ticketPrice: lottery.account.ticketPrice,
+						lastTicketId: lottery.account.lastTicketId,
+						winnerId: lottery.account.winnerId,
+						claimed: lottery.account.claimed,
 					};
 				});
+
 				setLotteries(lotteries);
 			} catch (error) {
 				console.log("SOMETHING WENT WRONG");
 				console.error(error);
 			}
 		})();
-	}, [program]);
-
+	}, [lotteryProgram]);
 
 	return (
 		<div className="container mx-auto py-10">

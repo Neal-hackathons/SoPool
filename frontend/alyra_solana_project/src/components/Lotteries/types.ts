@@ -1,10 +1,14 @@
+import type { BN } from "@coral-xyz/anchor";
+import type { PublicKey } from "@solana/web3.js";
 
 export type Lottery = {
-	lottery_addr: string;
-	lottery_code: string;
-	description: string;
-	yield: number;
-	prize: number;
-};
+    id: number;
+    authority: PublicKey;
+    token: PublicKey;
+    ticketPrice: BN;
+    lastTicketId: number;
+    winnerId: number;
+    claimed: boolean;
+}
 
 
