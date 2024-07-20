@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { AnchorProvider, Program, type Wallet } from "@coral-xyz/anchor";
 import type { Connection, Transaction } from "@solana/web3.js";
+import  { PublicKey } from "@solana/web3.js";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -10,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
 import IDL_LOTTERY from "../idl/lottery.json";
 //import IDL_STAKING from "./staking.json";
 
-import { STAKING_PROGRAM_ID, LOTTERY_PROGRAM_ID } from "./constants.js";
+import { STAKING_PROGRAM_ID, LOTTERY_PROGRAM_ID, MASTER_SEED, LOTTERY_SEED } from "./constants.js";
 import type { Lottery } from "../types/lottery";
 
 
@@ -39,11 +40,23 @@ export const confirmTx = async (txHash:any, connection: Connection) => {
 	return program;
 };*/
 
-/*export const getVoterAddress = async (votePublicKey, userPublicKey) => {
+export const getMasterAddress = async () => {
   return (
     await PublicKey.findProgramAddress(
-      [votePublicKey.toBuffer(), userPublicKey.toBuffer()],
-      PROGRAM_ID
+      [Buffer.from(MASTER_SEED)], 
+	  LOTTERY_PROGRAM_ID
     )
   )[0];
-};*/
+};
+
+export const getNewLotteryAddress = async (index:number) => {
+	const buffer = Buffer.alloc(4);
+	buffer.writeUInt32LE(index + 1, 0);
+
+	return (
+		await PublicKey.findProgramAddress(
+		[Buffer.from(LOTTERY_SEED), buffer], 
+		LOTTERY_PROGRAM_ID
+	  )
+	)[0];
+  };
