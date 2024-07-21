@@ -31,6 +31,7 @@ const init_master = async (
 		const txHash = program.methods
 			.initMaster()
 			.accounts({
+				// @ts-expect-error
 				master: masterAddress,
 				payer: wallet.publicKey,
 			})
