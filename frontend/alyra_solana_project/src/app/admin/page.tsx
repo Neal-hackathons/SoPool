@@ -11,7 +11,10 @@ export default function Admin() {
 
 	if (!isAdmin)
 		return (
-			<h1 className="text-7xl  place-self-center text-center">Not admin</h1>
+			<main className="min-h-screen h-full bg-blue-600">
+				<AppHeader />
+				<h1 className="text-7xl  place-self-center text-center">Not admin</h1>
+			</main>
 		);
 
 	return (

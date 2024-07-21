@@ -10,14 +10,14 @@ import bs58 from "bs58";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
+	const { isAdmin, setIsAdmin } = useAdminContext();
 
-	const { setIsAdmin } = useAdminContext();
-	
 	const wallet = useWallet();
 
-	const router = useRouter()
+	const router = useRouter();
 
-	if (!wallet.connected) router.push("/")
+	if (!wallet.connected) router.push("/");
+	if (isAdmin) router.push("/admin");
 
 	return (
 		<main className="min-h-screen bg-blue-600">
@@ -30,7 +30,7 @@ export default function Login() {
 						const signedMessage = await signedMessageFromWallet(wallet);
 
 						if (!signedMessage) {
-							router.push("/")
+							router.push("/");
 							return;
 						}
 
@@ -39,8 +39,8 @@ export default function Login() {
 						const isAdmin = await verifyAdminSignature(damn);
 
 						if (isAdmin) {
-							setIsAdmin(true)
-							router.push("/admin")
+							setIsAdmin(true);
+							router.push("/admin");
 						}
 					}}
 				>
