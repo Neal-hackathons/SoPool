@@ -10,16 +10,14 @@ import bs58 from "bs58";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
-	const { isAdmin, setIsAdmin } = useAdminContext();
+
+	const { setIsAdmin } = useAdminContext();
+	
 	const wallet = useWallet();
 
 	const router = useRouter()
 
 	if (!wallet.connected) router.push("/")
-
-	if (isAdmin) {
-		router.push("/admin")
-	}
 
 	return (
 		<main className="min-h-screen bg-blue-600">
@@ -32,7 +30,6 @@ export default function Login() {
 						const signedMessage = await signedMessageFromWallet(wallet);
 
 						if (!signedMessage) {
-							setIsAdmin(false);
 							router.push("/")
 							return;
 						}
@@ -41,7 +38,10 @@ export default function Login() {
 
 						const isAdmin = await verifyAdminSignature(damn);
 
-						setIsAdmin(isAdmin);
+						if (isAdmin) {
+							setIsAdmin(true)
+							router.push("/admin")
+						}
 					}}
 				>
 					Try to login
