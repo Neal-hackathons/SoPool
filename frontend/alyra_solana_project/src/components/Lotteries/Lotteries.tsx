@@ -155,7 +155,7 @@ export function PublicLotteriesTable() {
 
 
 	if (lotteries.length === 0)
-		return <div className="flex items-center justify-between">Loading... is Wallet connected ?...</div>;
+		return <h1 className="flex items-center justify-between text-3xl">Loading... is Wallet connected ?...</h1>;
 
 	return (
 		<div className="container mx-auto py-10">
