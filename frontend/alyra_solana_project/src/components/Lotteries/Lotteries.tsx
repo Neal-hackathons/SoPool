@@ -1,54 +1,190 @@
 "use client";
 
-import { columns } from "./columns";
+import { adminColumns, publicColumns } from "./columns";
 import { DataTable } from "./data-table";
 
-import {  useState, useEffect, useMemo } from "react";
-import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
-import type { Lottery } from "./types";
-import { getProgram } from "../../lib/utils";
-import type { Wallet } from "@project-serum/anchor";
 
-export function LotteriesTable() {
-	const [lotteries, setLotteries] = useState<Lottery[]>([]);
+import { useState, useEffect, useMemo } from "react";
+import { type AnchorWallet, useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import {
+	getLotteryProgram,
+	getLotteryAddressAt /*, getStakingProgram*/,
+	getNewTicketAddress,
+} from "../../lib/utils";
+import type { Program, Wallet } from "@coral-xyz/anchor";
+import type { UILottery } from "./types";
+import type { Lottery } from "@/types/lottery";
 
+const loadLotteries = async (program: Program<Lottery>) => {
+	try {
+		const allLotteries = await program.account.lottery.all();
+
+		return allLotteries.map((lottery) => ({
+			id: lottery.account.id,
+			authority: lottery.publicKey.toBase58(),
+			token: lottery.account.token.toBase58(),
+			ticket_price: lottery.account.ticketPrice,
+			last_ticket_id: lottery.account.lastTicketId,
+			winner_id: lottery.account.winnerId,
+			claimed: lottery.account.claimed,
+		}));
+	} catch (error) {
+		console.log("SOMETHING WENT WRONG in load lotteries");
+		console.error(error);
+		return [];
+	}
+};
+
+export const pickWinner = async (
+	lotteryId: number,
+	program: Program<Lottery>,
+	wallet: AnchorWallet,
+) => {
+	if (lotteryId <= 0) return;
+	if (!program || !wallet) return;
+	try {
+		const lotteryAddress = await getLotteryAddressAt(lotteryId);
+
+		const txHash = await program.methods
+			.pickWinner(lotteryId)
+			.accounts({
+				lottery: lotteryAddress,
+				payer: wallet.publicKey,
+			})
+			//.signers([wallet.publicKey])
+			.rpc();
+		//confirmTx(txHash, connection);
+	} catch (error) {
+		console.log("SOMETHING WENT WRONG in pickwinner");
+		console.error(error);
+	}
+};
+export const buyTicket = async (
+	lotteryId: number,
+	program: Program<Lottery>,
+	wallet: AnchorWallet,
+) => {
+	if (lotteryId <= 0) return;
+	if (!program || !wallet) return;
+	try {
+		const lotteryAddress = await getLotteryAddressAt(lotteryId);
+
+		const lotteryData = await program.account.lottery.fetch(lotteryAddress);
+		if (!lotteryData) {
+			throw new Error("Compte non trouvé");
+		}
+		//console.log("last Ticke", lotteryData.lastTicketId);
+		const ticketAddress = await getNewTicketAddress(
+			lotteryData.lastTicketId,
+			lotteryAddress,
+		);
+
+		const txHash = await program.methods
+			.buyTicket(lotteryId)
+			.accounts({
+				// @ts-expect-error
+				lottery: lotteryAddress,
+				ticket: ticketAddress,
+				buyer: wallet.publicKey,
+			})
+			//.signers([wallet.publicKey])
+			.rpc();
+		//confirmTx(txHash, connection);
+	} catch (error) {
+		console.log("SOMETHING WENT WRONG in buyTicket");
+		console.error(error);
+	}
+};
+
+export const claimPrize = async (
+	lotteryId: number,
+	program: Program<Lottery>,
+	wallet: AnchorWallet,
+) => {
+	/*if (lotteryId <= 0) return;
+	if (!program || !wallet) return;
+	try {
+		const lotteryAddress = await getLotteryAddressAt(lotteryId);
+
+		const lotteryData = await program.account.lottery.fetch(lotteryAddress);
+        if (!lotteryData) {
+            throw new Error('Compte non trouvé');
+        }
+		const ticketAddress = await getNewTicketAddress(lotteryData.lastTicketId);
+		
+		const txHash = await program.methods
+			.buyTicket(lotteryId)
+			.accounts({
+				lottery: lotteryAddress,
+				ticket: ticketAddress
+				buyer: wallet.publicKey,
+			})
+			//.signers([wallet.publicKey])
+			.rpc();
+		//confirmTx(txHash, connection);
+	} catch (error) {
+		console.log("SOMETHING WENT WRONG in pickwinner");
+		console.error(error);
+	}*/
+};
+
+export function PublicLotteriesTable() {
+	const [lotteries, setLotteries] = useState<UILottery[]>([]);
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
+
 	const program = useMemo(() => {
 		if (connection && wallet) {
-			return getProgram(connection, wallet as Wallet);
+			return getLotteryProgram(connection, wallet as Wallet);
 		}
 	}, [connection, wallet]);
 
 	useEffect(() => {
 		if (!program) return;
-		(async () => {
-			try {
-				const allLotteries = await program.account.pool.all();
 
-				const lotteries = allLotteries.map((lottery) => {
-					console.log(`lottery ${lottery.account.prize}`);
-
-					return {
-						lottery_addr: lottery.publicKey.toBase58(),
-						lottery_code: lottery.account.name.toString(),
-						description: lottery.account.description.toString(),
-						yield: (Math.round(lottery.account.poolYield*100))/100,
-						prize: (Math.round(lottery.account.prize*100))/100,
-					};
-				});
-				setLotteries(lotteries);
-			} catch (error) {
-				console.log("SOMETHING WENT WRONG");
-				console.error(error);
-			}
-		})();
+		const fetchLotteries = async () => {
+			const loadedLotteries = await loadLotteries(program);
+			setLotteries(loadedLotteries);
+		};
+		fetchLotteries();
 	}, [program]);
 
+	if (!lotteries.length) return <div>Loading...</div>;
 
 	return (
 		<div className="container mx-auto py-10">
-			<DataTable columns={columns} data={lotteries} />
+			<DataTable columns={publicColumns} data={lotteries} />
+		</div>
+	);
+}
+
+export function AdminLotteriesTable() {
+	const [lotteries, setLotteries] = useState<UILottery[]>([]);
+	const { connection } = useConnection();
+	const wallet = useAnchorWallet();
+
+	const program = useMemo(() => {
+		if (connection && wallet) {
+			return getLotteryProgram(connection, wallet as Wallet);
+		}
+	}, [connection, wallet]);
+
+	useEffect(() => {
+		if (!program) return;
+
+		const fetchLotteries = async () => {
+			const loadedLotteries = await loadLotteries(program);
+			setLotteries(loadedLotteries);
+		};
+
+		fetchLotteries();
+	}, [program]);
+
+	if (!lotteries.length) return <div>Loading...</div>;
+
+	return (
+		<div className="container mx-auto py-10">
+			<DataTable columns={adminColumns} data={lotteries} />
 		</div>
 	);
 }

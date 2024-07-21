@@ -31,6 +31,8 @@ export function DataTable<TData, TValue>({
 		getCoreRowModel: getCoreRowModel(),
 	});
 
+	// TODO: get rpc connectivity here
+
 	return (
 		<div className="rounded-md border">
 			<Table>
