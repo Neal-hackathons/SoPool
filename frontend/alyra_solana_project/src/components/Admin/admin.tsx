@@ -153,7 +153,7 @@ export function CreateLossLottery() {
 			>
 				Create Lottery
 			</Button>
-			<text> (funds are transferred to the winner)</text>
+			<p> (funds are transferred to the winner)</p>
 		</div>
 	);
 }
