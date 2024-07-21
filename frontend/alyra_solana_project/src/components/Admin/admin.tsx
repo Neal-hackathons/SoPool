@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Connection, PublicKey } from '@solana/web3.js';
+import type { Connection } from '@solana/web3.js';
 import { BN } from "bn.js";
 import {  useMemo} from "react";
 import { type AnchorWallet, useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
@@ -88,6 +88,7 @@ const create_loss_lottery = async (program: Program<Lottery>, wallet: AnchorWall
 			.createLottery(priceLamport)
 			.accounts({
                 lottery: lotteryAddress,
+				// @ts-expect-error
                 master: masterAddress,
 	            payer: wallet.publicKey,
 			})
@@ -134,7 +135,7 @@ export function CreateLossLottery() {
             <Button
 				className="max-w-xs mx-auto"
 				onClick={async () => {
-					create_loss_lottery(program, wallet, connection ,price as number);
+					create_loss_lottery(program, wallet, connection ,Number.parseInt(price));
 				}}
 			>
 				Create Lottery

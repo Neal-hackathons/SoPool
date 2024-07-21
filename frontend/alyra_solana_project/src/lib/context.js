@@ -30,13 +30,14 @@ export const AppProvider = ({ children }) => {
     }
   }, [connection, wallet]);
 
+  const [lotteries, setLotteries] = useState([]);
+
   useEffect(() => {
     if(lotteries.length === 0){
       viewLotteries();
     }
-  }, []);
+  }, [lotteries.length]);
 
-  const [lotteries, setLotteries] = useState([]);
 
   const viewLotteries = async () => {
    
