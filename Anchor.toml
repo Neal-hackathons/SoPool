@@ -5,18 +5,18 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-lottery = "2JfVxGG5w5nxPwHKzMdhoewAhxz5Gj9wBKyZSuzQQ4Ye"
-staking = "2X9yDvzea1rfp7NyRn9Fwi9ikhh2ho84pvDJ34GQSvWb"
+lottery = "13r5dniDEeMszUj4kMyQHcpQEKQmvDWYwjevdkB4Ta9"
+staking = "3K44q3YYWGyeXsW3sh5zM1QkfDNiPjuSKPJko5v28WPo"
 
 [programs.localnet]
-so_pool = "J6mPMTYtKxVzxH8EZk5GmjueJd2uXUmymY4eUdXLkFQX"
-staking = "2X9yDvzea1rfp7NyRn9Fwi9ikhh2ho84pvDJ34GQSvWb"
+lottery = "13r5dniDEeMszUj4kMyQHcpQEKQmvDWYwjevdkB4Ta9"
+staking = "3K44q3YYWGyeXsW3sh5zM1QkfDNiPjuSKPJko5v28WPo"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Devnet"
+cluster = "devnet"
 wallet = "./common_wallet.json"
 
 [scripts]
