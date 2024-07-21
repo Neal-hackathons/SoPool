@@ -30,7 +30,17 @@ export const adminColumns: ColumnDef<UILottery>[] = [
 	},
 	{
 		accessorKey: "ticket_price",
-		header: "Ticket Price",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Ticket price
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
 	},
 	{
 		accessorKey: "last_ticket_id",
@@ -104,15 +114,15 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 		accessorKey: "ticket_price",
 		header: ({ column }) => {
 			return (
-			  <Button
-				variant="ghost"
-				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-			  >
-				Ticket price
-				<ArrowUpDown className="ml-2 h-4 w-4" />
-			  </Button>
-			)
-		  },
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Ticket price
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
 	},
 	{
 		accessorKey: "last_ticket_id",

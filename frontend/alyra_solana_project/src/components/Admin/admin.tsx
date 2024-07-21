@@ -55,9 +55,10 @@ export function InitMaster() {
 	}
 
 	return (
-		<div className="container mx-auto py-10">
+		<div className="container mx-auto py-10 space-y-3 flex flex-col items-center justify-between">
+			<h2>Initialze Protocol</h2>
 			<Button
-				className="max-w-xs mx-auto"
+				className="max-w-xs mx-auto bg-yellow-300 text-black"
 				onClick={async () => {
 					init_master(program, wallet);
 				}}
@@ -132,7 +133,7 @@ export function CreateLossLottery() {
 	}
 
 	return (
-		<div className="container mx-auto py-10">
+		<div className="container mx-auto py-10 space-y-6">
 			<Input
 				type="number"
 				id="price"
@@ -141,7 +142,7 @@ export function CreateLossLottery() {
 				onChange={(e) => setPrice(e.target.value)}
 			/>
 			<Button
-				className="max-w-xs mx-auto"
+				className="max-w-xs mx-auto bg-yellow-300 text-black"
 				onClick={async () => {
 					create_loss_lottery(
 						program,

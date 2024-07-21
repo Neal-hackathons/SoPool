@@ -18,15 +18,13 @@ import {
 import type { Program, Wallet } from "@coral-xyz/anchor";
 import type { UILottery } from "./types";
 import type { Lottery } from "@/types/lottery";
+import { Button } from "../ui/button";
 
 const loadLotteries = async (program: Program<Lottery>) => {
 	try {
 		const allLotteries = await program.account.lottery.all();
 
 		return allLotteries.map((lottery) => {
-
-
-			
 			return {
 				id: lottery.account.id,
 				authority: lottery.publicKey.toBase58(),
@@ -174,6 +172,11 @@ export function PublicLotteriesTable() {
 
 export function AdminLotteriesTable() {
 	const [lotteries, setLotteries] = useState<UILottery[]>([]);
+	const [viewMode, setViewMode] = useState<"claimed" | "unclaimed" | "all">(
+		"all",
+	);
+	const claimedLotteries = lotteries.filter((lottery) => lottery.claimed);
+	const unclaimedLotteries = lotteries.filter((lottery) => !lottery.claimed);
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
 
@@ -197,8 +200,38 @@ export function AdminLotteriesTable() {
 	if (!lotteries.length) return <div>Loading...</div>;
 
 	return (
-		<div className="container mx-auto py-10">
-			<DataTable columns={adminColumns} data={lotteries} />
+		<div className="container mx-auto py-10 space-y-8">
+			<div className="flex items-center justify-between">
+				<Button
+					className="bg-yellow-300 text-black"
+					onClick={() => setViewMode("all")}
+				>
+					All
+				</Button>
+				<Button
+					className="bg-yellow-300 text-black"
+					onClick={() => setViewMode("unclaimed")}
+				>
+					Unclaimed
+				</Button>
+				<Button
+					className="bg-yellow-300 text-black"
+					onClick={() => setViewMode("claimed")}
+				>
+					Claimed
+				</Button>
+			</div>
+			{viewMode === "all" && (
+				<DataTable columns={adminColumns} data={lotteries} />
+			)}
+
+			{viewMode === "claimed" && (
+				<DataTable columns={adminColumns} data={claimedLotteries} />
+			)}
+
+			{viewMode === "unclaimed" && (
+				<DataTable columns={adminColumns} data={unclaimedLotteries} />
+			)}
 		</div>
 	);
 }

@@ -24,7 +24,7 @@ export default function Login() {
 			<section className="grid space-y-8">
 				<h1 className="text-7xl  place-self-center">Login as Admin</h1>
 				<Button
-					className="max-w-xs mx-auto"
+					className="max-w-xs mx-auto bg-yellow-300"
 					onClick={async () => {
 						const signedMessage = await signedMessageFromWallet(wallet);
 

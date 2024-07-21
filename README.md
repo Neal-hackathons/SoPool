@@ -105,6 +105,13 @@ deploy
 anchor deploy --provider.cluster devnet --provider.wallet ./common_wallet.json
 ```
 
+### Upgrade program
+
+```shell
+# ./.
+anchor upgrade target/deploy/lottery.so --provider.cluster devnet --program-id 13r5dniDEeMszUj4kMyQHcpQEKQmvDWYwjevdkB4Ta9
+```
+
 ### Main net
 
 Update programs' addresses
