@@ -13,8 +13,8 @@ import {
 	getLotteryProgram,
 	getLotteryAddressAt /*, getStakingProgram*/,
 	getNewTicketAddress,
-	formatLamportsToSolForUI,
 	getTicketAddressAt,
+	formatLamportsToSolForUI,
 } from "../../lib/utils";
 import type { Program, Wallet } from "@coral-xyz/anchor";
 import type { UILottery } from "./types";
@@ -26,6 +26,12 @@ const loadLotteries = async (program: Program<Lottery>) => {
 		const allLotteries = await program.account.lottery.all();
 
 		return allLotteries.map((lottery) => {
+<<<<<<< HEAD
+=======
+
+
+			
+>>>>>>> 23523da (fix: ui polish)
 			return {
 				id: lottery.account.id,
 				authority: lottery.publicKey.toBase58(),
