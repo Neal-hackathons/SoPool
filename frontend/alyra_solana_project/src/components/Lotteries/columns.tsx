@@ -17,6 +17,7 @@ import {
 } from "../ui/dropdown-menu";
 
 import { pickWinner, buyTicket, claimPrize } from "./Lotteries";
+import { ArrowUpDown } from "lucide-react";
 
 export const adminColumns: ColumnDef<UILottery>[] = [
 	{
@@ -101,7 +102,17 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 	},
 	{
 		accessorKey: "ticket_price",
-		header: "Ticket Price",
+		header: ({ column }) => {
+			return (
+			  <Button
+				variant="ghost"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			  >
+				Ticket price
+				<ArrowUpDown className="ml-2 h-4 w-4" />
+			  </Button>
+			)
+		  },
 	},
 	{
 		accessorKey: "last_ticket_id",

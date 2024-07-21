@@ -5,6 +5,8 @@ import {
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
+	type SortingState,
+	getSortedRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -15,6 +17,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -25,13 +28,20 @@ export function DataTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
+
+	const [sorting, setSorting] = useState<SortingState>([]);
+	
 	const table = useReactTable({
 		data,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
+		onSortingChange: setSorting,
+		getSortedRowModel: getSortedRowModel(),
+		state: {
+			sorting,
+		},
 	});
 
-	// TODO: get rpc connectivity here
 
 	return (
 		<div className="rounded-md border">
@@ -41,7 +51,10 @@ export function DataTable<TData, TValue>({
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header) => {
 								return (
-									<TableHead className="text-black bg-slate-200" key={header.id}>
+									<TableHead
+										className="text-black bg-slate-200"
+										key={header.id}
+									>
 										{header.isPlaceholder
 											? null
 											: flexRender(
