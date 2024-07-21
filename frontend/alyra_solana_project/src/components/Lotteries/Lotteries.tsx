@@ -137,8 +137,6 @@ export function PublicLotteriesTable() {
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
 
-	const walletModal = useWalletModal()
-
 	const program = useMemo(() => {
 		if (connection && wallet) {
 			return getLotteryProgram(connection, wallet as Wallet);
@@ -155,12 +153,9 @@ export function PublicLotteriesTable() {
 		fetchLotteries();
 	}, [program]);
 
-	if (!wallet) {
-        walletModal.setVisible(true);
-      }
 
-	if (!lotteries.length)
-		return <div className="flex items-center justify-between">Loading...</div>;
+	if (lotteries.length === 0)
+		return <div className="flex items-center justify-between">Loading... is Wallet connected ?...</div>;
 
 	return (
 		<div className="container mx-auto py-10">

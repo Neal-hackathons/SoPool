@@ -14,6 +14,7 @@ import {
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useAdminContext } from "@/contexts/AdminContextProvider";
 
 const components: { title: string; href: string; description: string }[] = [
 	{
@@ -40,6 +41,8 @@ const components: { title: string; href: string; description: string }[] = [
 
 export function Navigation() {
 	const wallet = useWallet();
+
+	const {isAdmin} = useAdminContext();
 
 	const isPossibleAdmin =
 		wallet.publicKey?.toString() === process.env.NEXT_PUBLIC_ADMIN_PUBLIC_KEY;
@@ -91,7 +94,7 @@ export function Navigation() {
 					</Link>
 
 					{isPossibleAdmin  && (
-						<Link href="/login" legacyBehavior passHref>
+						<Link href={isAdmin ? "/admin" : "/login"} legacyBehavior passHref>
 							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 								admin
 							</NavigationMenuLink>
