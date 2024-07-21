@@ -20,14 +20,17 @@ export default function Admin() {
 	return (
 		<main className="min-h-screen h-full bg-blue-600">
 			<AppHeader />
-			<section className="grid mx-auto">
-				<InitMaster />
-			</section>
-			<section className="grid mx-auto">
-				<CreateLossLottery />
-			</section>
-			<section className="grid mx-auto">
-				<AdminLotteriesTable />
+			<section className="mx-auto flex flex-col items-center">
+				<article className="grid mx-auto col-span-2">
+					<InitMaster />
+				</article>
+				<article className="mx-auto cols-span-2 flex w-full">
+					<CreateLossLottery />
+					<CreateLossLottery />
+				</article>
+				<article className="grid mx-auto cols-span-2">
+					<AdminLotteriesTable />
+				</article>
 			</section>
 		</main>
 	);

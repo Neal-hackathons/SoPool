@@ -100,6 +100,13 @@ export function Navigation() {
 							</NavigationMenuLink>
 						</Link>
 					)}
+					{isAdmin  && (
+						<Link href="/tests" legacyBehavior passHref>
+							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+								tests
+							</NavigationMenuLink>
+						</Link>
+					)}
 				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>
