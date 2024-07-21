@@ -13,6 +13,7 @@ import {
 	getLotteryProgram,
 	getLotteryAddressAt /*, getStakingProgram*/,
 	getNewTicketAddress,
+	getTicketAddressAt,
 	formatLamportsToSolForUI,
 } from "../../lib/utils";
 import type { Program, Wallet } from "@coral-xyz/anchor";
@@ -108,32 +109,32 @@ export const claimPrize = async (
 	program: Program<Lottery>,
 	wallet: AnchorWallet,
 ) => {
-	/*if (lotteryId <= 0) return;
+	if (lotteryId <= 0) return;
 	if (!program || !wallet) return;
 	try {
 		const lotteryAddress = await getLotteryAddressAt(lotteryId);
-
+	
 		const lotteryData = await program.account.lottery.fetch(lotteryAddress);
-        if (!lotteryData) {
-            throw new Error('Compte non trouvé');
-        }
-		const ticketAddress = await getNewTicketAddress(lotteryData.lastTicketId);
-		
+		if (!lotteryData) {
+			throw new Error('Compte non trouvé');
+		}
+		const winnerId = lotteryData.winnerId;
+		const ticketAddress = await getTicketAddressAt(winnerId, lotteryAddress);
 		const txHash = await program.methods
-			.buyTicket(lotteryId)
+			.claimPrize(lotteryId, winnerId)
 			.accounts({
-				lottery: lotteryAddress,
-				ticket: ticketAddress
-				buyer: wallet.publicKey,
+			lottery: lotteryAddress,
+			ticket: ticketAddress,
+			buyer: wallet.publicKey,
 			})
 			//.signers([wallet.publicKey])
 			.rpc();
-		//confirmTx(txHash, connection);
-	} catch (error) {
-		console.log("SOMETHING WENT WRONG in pickwinner");
-		console.error(error);
-	}*/
-};
+			//confirmTx(txHash, connection);
+		} catch (error) {
+			console.log("SOMETHING WENT WRONG in claimPrize");
+			console.error(error);
+		}
+};		
 
 export function PublicLotteriesTable() {
 	const [lotteries, setLotteries] = useState<UILottery[]>([]);

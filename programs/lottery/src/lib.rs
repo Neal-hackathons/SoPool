@@ -14,11 +14,7 @@ use anchor_spl::{
 
 use crate::{constants::*, error::LotteryError};
 
-
-
 pub use state::*;
-
-
 
 use staking::program::Staking;
 
@@ -27,14 +23,15 @@ pub use staking::Receipt;
 
 //use staking::{self,Receipt};
 
-
-
-declare_id!("2JfVxGG5w5nxPwHKzMdhoewAhxz5Gj9wBKyZSuzQQ4Ye");
+declare_id!("13r5dniDEeMszUj4kMyQHcpQEKQmvDWYwjevdkB4Ta9");
 
 #[program]
 mod lottery {
     use super::*;
-    pub fn init_master(_ctx: Context<InitMaster>) -> Result<()> {
+    pub fn init_master(ctx: Context<InitMaster>) -> Result<()> {
+        let master = &mut ctx.accounts.master;
+        master.last_id = 0;
+
         Ok(())
     }
 
@@ -221,16 +218,15 @@ mod lottery {
         }
 
         // Pick a pseudo-random winner
-        // TODO
-        // let clock = Clock::get()?;
-        // let pseudo_random_number = ((u64::from_le_bytes(
-        //     <[u8; 8]>::try_from(&hash(&clock.unix_timestamp.to_le_bytes()).to_bytes()[..8])
-        //         .unwrap(),
-        // ) * clock.slot)
-        //     % u32::MAX as u64) as u32;
+        let clock = Clock::get()?;
+        let pseudo_random_number = ((u64::from_le_bytes(
+             <[u8; 8]>::try_from(&hash(&clock.unix_timestamp.to_le_bytes()).to_bytes()[..8])
+                 .unwrap(),
+         ) * clock.slot)
+             % u32::MAX as u64) as u32;
 
-        // let winner_id = (pseudo_random_number % lottery.last_ticket_id) + 1;
-        let winner_id = 1;
+        let winner_id = (pseudo_random_number % lottery.last_ticket_id) + 1;
+        //let winner_id = 1;
         lottery.winner_id = winner_id;// Some(winner_id);// TODO
 
         msg!("Winner id: {}", winner_id);
@@ -356,46 +352,42 @@ mod lottery {
         Ok(())
     }
 
-    // pub fn claim_prize(ctx: Context<ClaimPrize>, _lottery_id: u32, _ticket_id: u32) -> Result<()> {
-    //     let lottery = &mut ctx.accounts.lottery;
-    //     let ticket = &ctx.accounts.ticket;
-    //     let winner = &ctx.accounts.authority;
+     pub fn claim_prize(ctx: Context<ClaimPrize>, _lottery_id: u32, _ticket_id: u32) -> Result<()> {
+         let lottery = &mut ctx.accounts.lottery;
+         let ticket = &ctx.accounts.ticket;
+         let winner = &ctx.accounts.authority;
 
-    //     if lottery.claimed {
-    //         return err!(LotteryError::AlreadyClaimed);
-    //     }
+         if lottery.claimed {
+             return err!(LotteryError::AlreadyClaimed);
+         }
 
-    //     // Validate winner_id
-    //     match lottery.winner_id {
-    //         Some(winner_id) => {
-    //             if winner_id != ticket.id {
-    //                 return err!(LotteryError::InvalidWinner);
-    //             }
-    //         }
-    //         None => return err!(LotteryError::WinnerNotChosen),
-    //     };
+         // Validate winner_id
+         if lottery.winner_id != ticket.id
+         {
+             return err!(LotteryError::InvalidWinner);
+         }
 
-    //     // Transfer the prize from Lottery PDA to the winner
-    //     let prize = lottery
-    //         .ticket_price
-    //         .checked_mul(lottery.last_ticket_id.into())
-    //         .unwrap();
+         // Transfer the prize from Lottery PDA to the winner
+         let prize = lottery
+             .ticket_price
+             .checked_mul(lottery.last_ticket_id.into())
+             .unwrap();
 
-    //     **lottery.to_account_info().try_borrow_mut_lamports()? -= prize;
-    //     **winner.to_account_info().try_borrow_mut_lamports()? += prize;
+         **lottery.to_account_info().try_borrow_mut_lamports()? -= prize;
+         **winner.to_account_info().try_borrow_mut_lamports()? += prize;
 
-    //     lottery.claimed = true;
+         lottery.claimed = true;
 
-    //     msg!(
-    //         "{} claimed {} lamports from lottery id {} with ticket id {}",
-    //         winner.key(),
-    //         prize,
-    //         lottery.id,
-    //         ticket.id
-    //     );
+         msg!(
+             "{} claimed {} lamports from lottery id {} with ticket id {}",
+             winner.key(),
+             prize,
+             lottery.id,
+             ticket.id
+         );
 
-    //     Ok(())
-    // }
+         Ok(())
+    }
 }
 
 #[derive(Accounts)]

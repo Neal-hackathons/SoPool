@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/lottery.json`.
  */
 export type Lottery = {
-  "address": "6q1FDc6PWjEzaVgjjHbDvzrYtbiKYTgS6Bwpc7LABweV",
+  "address": "13r5dniDEeMszUj4kMyQHcpQEKQmvDWYwjevdkB4Ta9",
   "metadata": {
     "name": "lottery",
     "version": "0.1.0",
@@ -137,6 +137,93 @@ export type Lottery = {
       "args": [
         {
           "name": "lotteryId",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "claimPrize",
+      "discriminator": [
+        157,
+        233,
+        139,
+        121,
+        246,
+        62,
+        234,
+        235
+      ],
+      "accounts": [
+        {
+          "name": "lottery",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  111,
+                  116,
+                  116,
+                  101,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "lotteryId"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "lottery"
+              },
+              {
+                "kind": "arg",
+                "path": "ticketId"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "ticket"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "lotteryId",
+          "type": "u32"
+        },
+        {
+          "name": "ticketId",
           "type": "u32"
         }
       ]
@@ -356,7 +443,7 @@ export type Lottery = {
         },
         {
           "name": "stakingProgram",
-          "address": "HRij1YGqCYPpPUbEVPpH4qQPJb3gfZosHKuKydDYGqzT"
+          "address": "3K44q3YYWGyeXsW3sh5zM1QkfDNiPjuSKPJko5v28WPo"
         },
         {
           "name": "tokenProgram",
@@ -632,7 +719,7 @@ export type Lottery = {
         },
         {
           "name": "stakingProgram",
-          "address": "HRij1YGqCYPpPUbEVPpH4qQPJb3gfZosHKuKydDYGqzT"
+          "address": "3K44q3YYWGyeXsW3sh5zM1QkfDNiPjuSKPJko5v28WPo"
         },
         {
           "name": "tokenProgram",

@@ -16,15 +16,23 @@ import {
 	getLotteryProgram,
 	getMasterAddress,
 } from "../../lib/utils";
+
 import type { Wallet, Program } from "@coral-xyz/anchor";
 import type { Lottery } from "../../types/lottery";
 
-function init_master(program: Program<Lottery>, wallet: AnchorWallet) {
+const init_master = async (
+	program: Program<Lottery>, 
+	wallet: AnchorWallet
+) => {
 	if (!program || !wallet) return;
 	try {
+		const masterAddress = await getMasterAddress();
+		console.log("master", masterAddress.toString());
 		const txHash = program.methods
 			.initMaster()
 			.accounts({
+				// @ts-expect-error
+				master: masterAddress,
 				payer: wallet.publicKey,
 			})
 			.rpc();

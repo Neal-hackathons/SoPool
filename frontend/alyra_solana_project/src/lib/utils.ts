@@ -28,7 +28,7 @@ export const getLotteryProgram = (connection: Connection, wallet: Wallet) => {
 	return program;
 };
 
-export const confirmTx = async (txHash: any, connection: Connection) => {
+export const confirmTx = async (txHash: string, connection: Connection) => {
 	const blockhashInfo = await connection.getLatestBlockhash();
 	await connection.confirmTransaction({
 		blockhash: blockhashInfo.blockhash,
@@ -112,3 +112,16 @@ export function formatLamportsToSolForUI(lamports: BN) {
 	const strLamports = lamports.toString(10,2);
 	return strLamports.startsWith("0") ? `0.${strLamports.slice(1,2)} SOL` : `${strLamports.slice(0,1)} SOL`
 }
+
+
+  export const getTicketAddressAt = async (index:number, lotteryAddress: PublicKey) => {
+	const buffer = Buffer.alloc(4);
+	buffer.writeUInt32LE(index, 0);
+
+	return (
+		await PublicKey.findProgramAddress(
+		[Buffer.from(TICKET_SEED), lotteryAddress.toBuffer(), buffer], 
+		LOTTERY_PROGRAM_ID
+	  )
+	)[0];
+  };
