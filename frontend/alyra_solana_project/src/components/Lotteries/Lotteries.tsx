@@ -3,9 +3,12 @@
 import { adminColumns, publicColumns } from "./columns";
 import { DataTable } from "./data-table";
 
-
 import { useState, useEffect, useMemo } from "react";
-import { type AnchorWallet, useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
+import {
+	type AnchorWallet,
+	useAnchorWallet,
+	useConnection,
+} from "@solana/wallet-adapter-react";
 import {
 	getLotteryProgram,
 	getLotteryAddressAt /*, getStakingProgram*/,
@@ -14,6 +17,7 @@ import {
 import type { Program, Wallet } from "@coral-xyz/anchor";
 import type { UILottery } from "./types";
 import type { Lottery } from "@/types/lottery";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const loadLotteries = async (program: Program<Lottery>) => {
 	try {
@@ -133,6 +137,8 @@ export function PublicLotteriesTable() {
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
 
+	const walletModal = useWalletModal()
+
 	const program = useMemo(() => {
 		if (connection && wallet) {
 			return getLotteryProgram(connection, wallet as Wallet);
@@ -149,7 +155,12 @@ export function PublicLotteriesTable() {
 		fetchLotteries();
 	}, [program]);
 
-	if (!lotteries.length) return <div>Loading...</div>;
+	if (!wallet) {
+        walletModal.setVisible(true);
+      }
+
+	if (!lotteries.length)
+		return <div className="flex items-center justify-between">Loading...</div>;
 
 	return (
 		<div className="container mx-auto py-10">

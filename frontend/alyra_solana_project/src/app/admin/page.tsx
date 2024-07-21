@@ -19,10 +19,6 @@ export default function Admin() {
 			<section className="grid mx-auto">
 				<AdminLotteriesTable/>
 			</section>
-			<section className="grid mx-auto">
-				<section className="grid grid-cols-3 mx-auto gap-2">
-				</section>
-			</section>
 		</main>
 	);
 }
