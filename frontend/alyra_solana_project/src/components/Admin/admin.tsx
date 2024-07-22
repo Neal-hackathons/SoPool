@@ -166,7 +166,7 @@ export function CreateLossLottery() {
 					);
 					toast({
 						title: "Success",
-						description: "Lottery created",
+						description: "Lottery creation submitted",
 					});
 				}}
 			>
