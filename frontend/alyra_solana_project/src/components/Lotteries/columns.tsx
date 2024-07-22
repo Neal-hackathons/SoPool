@@ -107,7 +107,7 @@ export const adminColumns: ColumnDef<UILottery>[] = [
 						description: "Winner picked",
 					});
 				} catch (error) {
-					const errorMessage = extractErrorMessage(error);
+					const errorMessage = extractErrorMessage(error as Error);
 					toast({
 						title: "Failure",
 						description: errorMessage,
@@ -213,7 +213,7 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 						description: "Ticket bought",
 					});
 				} catch (error) {
-					const errorMessage = extractErrorMessage(error);
+					const errorMessage = extractErrorMessage(error as Error);
 					toast({
 						title: "Failure",
 						description: errorMessage,
@@ -237,7 +237,7 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 						description: "prize claimed",
 					});
 				} catch (error) {
-					if (error.message.includes("violated")) {
+					if ((error as Error).message.includes("violated")) {
 						toast({
 							title: "Failure",
 							description: "You are not the winner",
@@ -245,7 +245,7 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 					} else {
 						toast({
 							title: "Failure",
-							description: error.message,
+							description: (error as Error).message,
 						});
 					}
 				}

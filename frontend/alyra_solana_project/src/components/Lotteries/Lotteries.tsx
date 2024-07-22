@@ -120,7 +120,7 @@ export const claimPrize = async (
 			throw new Error("Lottery account not found");
 		}
 		const winnerId = lotteryData.winnerId;
-		if (winnerId == 0) {
+		if (winnerId === 0) {
 			throw new Error("Winner not selected yet!");
 		}
 		const ticketAddress = await getTicketAddressAt(winnerId, lotteryAddress);
