@@ -71,8 +71,21 @@ solana config set --url localhost
 ```
 
 ```shell
+# new shell session: test_validator_session
+# ~
+solana-test-validator
+```
+
+```shell
 # ./.
 solana airdrop -k ./common_wallet.json 100
+```
+
+
+```shell
+# shell session: test_validator_session
+# ~
+exit
 ```
 
 ```shell
