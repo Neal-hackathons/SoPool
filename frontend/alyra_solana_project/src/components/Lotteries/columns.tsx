@@ -20,6 +20,12 @@ import { pickWinner, buyTicket, claimPrize } from "./Lotteries";
 import { ArrowUpDown } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 
+function extractErrorMessage(error: Error): string {
+    const regex = /Error Message: (.*)\./;
+    const match = error.message.match(regex);
+    return match ? match[1] : error.message;
+}
+
 export const adminColumns: ColumnDef<UILottery>[] = [
 	{
 		accessorKey: "id",
@@ -94,13 +100,19 @@ export const adminColumns: ColumnDef<UILottery>[] = [
 					});
 					return;
 				}
-
-				await pickWinner(lotteryId, program, wallet);
-
-				toast({
-					title: "Success",
-					description: "Winner picked",
-				});
+				try {
+					await pickWinner(lotteryId, program, wallet);
+					toast({
+						title: "Success",
+						description: "Winner picked",
+					});
+				} catch (error) {
+					const errorMessage = extractErrorMessage(error);
+					toast({
+						title: "Failure",
+						description: errorMessage,
+					});
+				}
 			};
 
 			return (
@@ -190,12 +202,19 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 					});
 					return;
 				}
-
-				await buyTicket(lotteryId, program, wallet);
-				toast({
-					title: "Success",
-					description: "Ticket bought",
-				});
+				try {
+					await buyTicket(lotteryId, program, wallet);
+					toast({
+						title: "Success",
+						description: "Ticket bought",
+					});
+				} catch (error) {
+					const errorMessage = extractErrorMessage(error);
+					toast({
+						title: "Failure",
+						description: errorMessage,
+					});
+				}
 			};
 			const handleClaimPrize = async (lotteryId: number) => {
 				if (!wallet) {
@@ -214,10 +233,17 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 						description: "prize claimed",
 					});
 				} catch (error) {
-					toast({
-						title: "Failure",
-						description: error.message,
-					});
+					if (error.message.includes("violated")) {
+						toast({
+							title: "Failure",
+							description: "You are not the winner",
+						});
+					} else {
+						toast({
+							title: "Failure",
+							description: error.message,
+						});
+					}
 				}
 			};
 

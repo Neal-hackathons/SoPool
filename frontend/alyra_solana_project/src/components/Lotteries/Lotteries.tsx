@@ -66,6 +66,7 @@ export const pickWinner = async (
 	} catch (error) {
 		console.log("SOMETHING WENT WRONG in pickwinner");
 		console.error(error);
+		throw error;
 	}
 };
 export const buyTicket = async (
@@ -82,7 +83,6 @@ export const buyTicket = async (
 		if (!lotteryData) {
 			throw new Error("Compte non trouvé");
 		}
-		//console.log("last Ticke", lotteryData.lastTicketId);
 		const ticketAddress = await getNewTicketAddress(
 			lotteryData.lastTicketId,
 			lotteryAddress,
@@ -96,12 +96,12 @@ export const buyTicket = async (
 				ticket: ticketAddress,
 				buyer: wallet.publicKey,
 			})
-			//.signers([wallet.publicKey])
 			.rpc();
 		//confirmTx(txHash, connection);
 	} catch (error) {
 		console.log("SOMETHING WENT WRONG in buyTicket");
 		console.error(error);
+		throw error;
 	}
 };
 
