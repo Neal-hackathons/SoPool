@@ -6,9 +6,11 @@ Names:
 
 - Francis
 
-- 
+- ...
 
-- 
+- ...
+
+Project's resume : ...
 
 Deployed project: https://sopool.vercel.app/
 
