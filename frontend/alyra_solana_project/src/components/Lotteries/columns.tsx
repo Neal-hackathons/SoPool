@@ -174,6 +174,10 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 		header: "Ticket Count",
 	},
 	{
+		accessorKey: "winner_id",
+		header: "Winner",
+	},
+	{
 		id: "actions",
 		cell: ({ row }) => {
 			const lottery = row.original;
