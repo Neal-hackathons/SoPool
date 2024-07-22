@@ -170,7 +170,7 @@ export function PublicLotteriesTable() {
 
 	return (
 		<div className="container mx-auto py-10">
-			<DataTable columns={publicColumns} data={lotteries} />
+			<DataTable columns={publicColumns} data={unclaimedLotteries} />
 		</div>
 	);
 }
