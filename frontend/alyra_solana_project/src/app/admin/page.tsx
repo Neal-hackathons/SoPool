@@ -2,7 +2,6 @@
 
 import { AppHeader } from "@/components/AppHeader/appheader";
 import { InitMaster, CreateLossLottery } from "@/components/Admin/admin";
-import { Button } from "@/components/ui/button";
 import { AdminLotteriesTable } from "@/components/Lotteries/Lotteries";
 import { useAdminContext } from "@/contexts/AdminContextProvider";
 

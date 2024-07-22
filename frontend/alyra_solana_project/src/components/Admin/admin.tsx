@@ -100,11 +100,8 @@ const create_loss_lottery = async (
 			throw new Error("Compte non trouvé");
 		}
 
-		//console.log("masterInfo ", accountData.lastId);
 
 		const lotteryAddress = await getNewLotteryAddress(accountData.lastId);
-		//console.log("lottery ", lotteryAddress.toString());
-		//console.log("lamport ", priceLamport);
 
 		const txHash = await program.methods
 			.createLottery(priceLamport)
@@ -116,7 +113,6 @@ const create_loss_lottery = async (
 			})
 			//.signers([wallet.publicKey])
 			.rpc();
-		//console.log("after tx :", txHash);
 		//confirmTx(txHash, connection);
 	} catch (error) {
 		console.log("SOMETHING WENT WRONG in create lottery");

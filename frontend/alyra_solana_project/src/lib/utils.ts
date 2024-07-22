@@ -1,8 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { AnchorProvider, BN, Program, type Wallet } from "@coral-xyz/anchor";
-import type { Connection, Transaction } from "@solana/web3.js";
-import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import type { Connection} from "@solana/web3.js";
+import {  PublicKey } from "@solana/web3.js";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -17,7 +17,7 @@ import {
 	MASTER_SEED,
 	LOTTERY_SEED,
 	TICKET_SEED,
-} from "./constants.js";
+} from "./constants";
 import type { Lottery } from "../types/lottery";
 
 export const getLotteryProgram = (connection: Connection, wallet: Wallet) => {
@@ -110,23 +110,25 @@ export function lamportsToSol(lamportsBN: BN) {
 // Function to convert lamports to SOL and format as "X SOL"
 export function formatLamportsToSolForUI(lamports: BN) {
 	const lamportsPerSol = new BN(1_000_000_000);
-    const sol = lamports.div(lamportsPerSol).toNumber();
-    const remainder = lamports.mod(lamportsPerSol).toNumber();
-    const remainderStr = remainder.toString().padStart(9, '0'); // Ensures 9 digits for the fractional part
-    const fractionalPart = remainderStr.slice(0, 2); // Take only the first 2 digits for display
-    
-    return `${sol}.${fractionalPart} SOL`;
+	const sol = lamports.div(lamportsPerSol).toNumber();
+	const remainder = lamports.mod(lamportsPerSol).toNumber();
+	const remainderStr = remainder.toString().padStart(9, "0"); // Ensures 9 digits for the fractional part
+	const fractionalPart = remainderStr.slice(0, 2); // Take only the first 2 digits for display
+
+	return `${sol}.${fractionalPart} SOL`;
 }
 
-
-  export const getTicketAddressAt = async (index:number, lotteryAddress: PublicKey) => {
+export const getTicketAddressAt = async (
+	index: number,
+	lotteryAddress: PublicKey,
+) => {
 	const buffer = Buffer.alloc(4);
 	buffer.writeUInt32LE(index, 0);
 
 	return (
 		await PublicKey.findProgramAddress(
-		[Buffer.from(TICKET_SEED), lotteryAddress.toBuffer(), buffer], 
-		LOTTERY_PROGRAM_ID
-	  )
+			[Buffer.from(TICKET_SEED), lotteryAddress.toBuffer(), buffer],
+			LOTTERY_PROGRAM_ID,
+		)
 	)[0];
-  };
+};
