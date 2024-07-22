@@ -24,8 +24,7 @@ export default function Admin() {
 				<article className="grid mx-auto col-span-2">
 					<InitMaster />
 				</article>
-				<article className="mx-auto cols-span-2 flex w-full">
-					<CreateLossLottery />
+				<article className="mx-auto cols-span-2 flex items-center justify-between w-1/2">
 					<CreateLossLottery />
 				</article>
 				<article className="grid mx-auto cols-span-2">
