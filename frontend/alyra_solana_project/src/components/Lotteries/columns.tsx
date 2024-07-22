@@ -18,6 +18,7 @@ import {
 
 import { pickWinner, buyTicket, claimPrize } from "./Lotteries";
 import { ArrowUpDown } from "lucide-react";
+import { useToast } from "../ui/use-toast";
 
 export const adminColumns: ColumnDef<UILottery>[] = [
 	{
@@ -59,6 +60,8 @@ export const adminColumns: ColumnDef<UILottery>[] = [
 		cell: ({ row }) => {
 			const lottery = row.original;
 			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const { toast } = useToast();
+			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const { connection } = useConnection();
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const wallet = useAnchorWallet();
@@ -74,10 +77,20 @@ export const adminColumns: ColumnDef<UILottery>[] = [
 			const handlePickWinner = async (lotteryId: number) => {
 				if (!wallet) {
 					console.log("Wallet not connected");
+					toast({
+						variant: "destructive",
+						title: "Fail",
+						description: "Wallet not connected",
+					});
 					return;
 				}
 
 				await pickWinner(lotteryId, program, wallet);
+
+				toast({
+					title: "Success",
+					description: "Winner picked",
+				});
 			};
 
 			return (
@@ -133,6 +146,8 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 		cell: ({ row }) => {
 			const lottery = row.original;
 			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const { toast } = useToast();
+			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const { connection } = useConnection();
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const wallet = useAnchorWallet();
@@ -148,24 +163,42 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 			const handleBuyTicket = async (lotteryId: number) => {
 				if (!wallet) {
 					console.log("Wallet not connected");
+					toast({
+						variant: "destructive",
+						title: "Fail",
+						description: "Wallet not connected",
+					});
 					return;
 				}
 
 				await buyTicket(lotteryId, program, wallet);
+				toast({
+					title: "Success",
+					description: "Ticket bought",
+				});
 			};
 			const handleClaimPrize = async (lotteryId: number) => {
 				if (!wallet) {
 					console.log("Wallet not connected");
+					toast({
+						variant: "destructive",
+						title: "Fail",
+						description: "Wallet not connected",
+					});
 					return;
 				}
 
 				await claimPrize(lotteryId, program, wallet);
+				toast({
+					title: "Success",
+					description: "prize claimed",
+				});
 			};
 
 			return (
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button  className="h-8 w-8 min-w-fit p-2 bg-yellow-300 text-black">
+						<Button className="h-8 w-8 min-w-fit p-2 bg-yellow-300 text-black">
 							<span className="sr-only">Open menu</span>
 							Action
 						</Button>

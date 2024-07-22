@@ -19,11 +19,9 @@ import {
 
 import type { Wallet, Program } from "@coral-xyz/anchor";
 import type { Lottery } from "../../types/lottery";
+import { useToast } from "../ui/use-toast";
 
-const init_master = async (
-	program: Program<Lottery>, 
-	wallet: AnchorWallet
-) => {
+const init_master = async (program: Program<Lottery>, wallet: AnchorWallet) => {
 	if (!program || !wallet) return;
 	try {
 		const masterAddress = await getMasterAddress();
@@ -41,7 +39,7 @@ const init_master = async (
 		console.log("SOMETHING WENT WRONG in init master");
 		console.error(error);
 	}
-}
+};
 
 export function InitMaster() {
 	const { connection } = useConnection();
@@ -51,6 +49,8 @@ export function InitMaster() {
 			return getLotteryProgram(connection, wallet as Wallet);
 		}
 	}, [connection, wallet]);
+
+	const { toast } = useToast();
 
 	if (!program || !wallet) {
 		return (
@@ -69,6 +69,10 @@ export function InitMaster() {
 				className="max-w-xs mx-auto bg-yellow-300 text-black"
 				onClick={async () => {
 					init_master(program, wallet);
+					toast({
+						title: "Success",
+						description: "Protocol initialized",
+					});
 				}}
 			>
 				Init Master
@@ -122,6 +126,8 @@ const create_loss_lottery = async (
 export function CreateLossLottery() {
 	const [price, setPrice] = useState("");
 
+	const { toast } = useToast();
+
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
 	const program = useMemo(() => {
@@ -158,6 +164,10 @@ export function CreateLossLottery() {
 						connection,
 						Number.parseFloat(price),
 					);
+					toast({
+						title: "Success",
+						description: "Lottery created",
+					});
 				}}
 			>
 				Create Lottery
