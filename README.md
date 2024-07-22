@@ -1,5 +1,30 @@
 # SoPool
-# AlyraSolanaProject
+
+# Presentation
+
+Names:
+
+- Francis
+
+- 
+
+- 
+
+Deployed project: https://sopool.vercel.app/
+
+Stack: NextJS, Anchor
+
+frontend: ./frontend/alyra_solana_project
+
+programs: ./programs
+
+tests: ./tests
+
+#### Solana Explorer links
+
+Lottery: https://solscan.io/account/13r5dniDEeMszUj4kMyQHcpQEKQmvDWYwjevdkB4Ta9?cluster=devnet
+
+Staking: https://solscan.io/account/3K44q3YYWGyeXsW3sh5zM1QkfDNiPjuSKPJko5v28WPo?cluster=devnet
 
 
 ## Development
@@ -70,11 +95,9 @@ Just push to main or merge pull request into main, if code can build without err
 
 #### Devnet smart contracts addresses
 
-Lottery: ...TO BE UPDATED...
+Lottery: 13r5dniDEeMszUj4kMyQHcpQEKQmvDWYwjevdkB4Ta9
 
-Staking: ...TO BE UPDATED...
-
-SoPool: ...TO BE UPDATED...
+Staking: 3K44q3YYWGyeXsW3sh5zM1QkfDNiPjuSKPJko5v28WPo
 
 #### Commands to deploy to devnet
 
