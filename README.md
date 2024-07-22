@@ -8,7 +8,7 @@ Names:
 
 - François Beillouin
 
-- ...
+- Thibaud Catz
 
 Project's resume : ...
 
