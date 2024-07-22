@@ -23,7 +23,17 @@ import { useToast } from "../ui/use-toast";
 export const adminColumns: ColumnDef<UILottery>[] = [
 	{
 		accessorKey: "id",
-		header: "Identifier",
+		header: "Identifier",header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+						Identifier
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
 	},
 	{
 		accessorKey: "token",
@@ -117,7 +127,17 @@ export const adminColumns: ColumnDef<UILottery>[] = [
 export const publicColumns: ColumnDef<UILottery>[] = [
 	{
 		accessorKey: "id",
-		header: "Identifier",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+						Identifier
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
 	},
 	{
 		accessorKey: "token",
