@@ -207,12 +207,18 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 					});
 					return;
 				}
-
-				await claimPrize(lotteryId, program, wallet);
-				toast({
-					title: "Success",
-					description: "prize claimed",
-				});
+				try {
+					await claimPrize(lotteryId, program, wallet);
+					toast({
+						title: "Success",
+						description: "prize claimed",
+					});
+				} catch (error) {
+					toast({
+						title: "Failure",
+						description: error.message,
+					});
+				}
 			};
 
 			return (
