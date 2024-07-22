@@ -219,11 +219,22 @@ mod lottery {
 
         // Pick a pseudo-random winner
         let clock = Clock::get()?;
-        let pseudo_random_number = ((u64::from_le_bytes(
-             <[u8; 8]>::try_from(&hash(&clock.unix_timestamp.to_le_bytes()).to_bytes()[..8])
-                 .unwrap(),
-         ) * clock.slot)
-             % u32::MAX as u64) as u32;
+         // Hash the current Unix timestamp
+        let timestamp_hash = hash(&clock.slot.to_le_bytes());
+    
+        // Take the first 8 bytes of the hash
+        let hash_bytes: [u8; 8] = timestamp_hash.to_bytes()[..8].try_into().map_err(|_| {
+            ProgramError::InvalidAccountData
+        })?;
+    
+        // Convert the 8 bytes into a u64
+        let hashed_value = u64::from_le_bytes(hash_bytes);
+    
+        // Generate a pseudo-random number
+        let pseudo_random_number = hashed_value.wrapping_mul(clock.slot as u64) % (u32::MAX as u64);
+    
+        // Ensure the result fits into a u32
+        let pseudo_random_number = pseudo_random_number as u32;
 
         let winner_id = (pseudo_random_number % lottery.last_ticket_id) + 1;
         //let winner_id = 1;
