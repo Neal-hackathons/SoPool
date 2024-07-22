@@ -165,8 +165,9 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 			return (
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="h-8 w-8 p-0">
+						<Button  className="h-8 w-8 min-w-fit p-2 bg-yellow-300 text-black">
 							<span className="sr-only">Open menu</span>
+							Action
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">

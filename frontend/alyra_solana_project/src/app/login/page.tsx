@@ -40,6 +40,7 @@ export default function Login() {
 						if (isAdmin) {
 							setIsAdmin(true);
 							router.push("/admin");
+							return;
 						}
 					}}
 				>

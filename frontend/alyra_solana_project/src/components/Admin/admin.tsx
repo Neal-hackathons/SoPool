@@ -64,7 +64,7 @@ export function InitMaster() {
 
 	return (
 		<div className="container mx-auto py-10 space-y-3 flex flex-col items-center justify-between">
-			<h2>Initialze Protocol</h2>
+			<h2>Initialize Protocol</h2>
 			<Button
 				className="max-w-xs mx-auto bg-yellow-300 text-black"
 				onClick={async () => {

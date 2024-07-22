@@ -20,6 +20,7 @@ import type { Program, Wallet } from "@coral-xyz/anchor";
 import type { UILottery } from "./types";
 import type { Lottery } from "@/types/lottery";
 import { Button } from "../ui/button";
+import { ADDRESS_TO_TOKEN_MAP } from "@/lib/AddressToTokenMap";
 
 const loadLotteries = async (program: Program<Lottery>) => {
 	try {
@@ -29,7 +30,7 @@ const loadLotteries = async (program: Program<Lottery>) => {
 			return {
 				id: lottery.account.id,
 				authority: lottery.publicKey.toBase58(),
-				token: lottery.account.token.toBase58(),
+				token: ADDRESS_TO_TOKEN_MAP.get(lottery.account.token.toBase58()) ?? "SOL",
 				ticket_price: formatLamportsToSolForUI(lottery.account.ticketPrice),
 				last_ticket_id: lottery.account.lastTicketId,
 				winner_id: lottery.account.winnerId,
@@ -113,31 +114,34 @@ export const claimPrize = async (
 	if (!program || !wallet) return;
 	try {
 		const lotteryAddress = await getLotteryAddressAt(lotteryId);
-	
+
 		const lotteryData = await program.account.lottery.fetch(lotteryAddress);
 		if (!lotteryData) {
-			throw new Error('Compte non trouvé');
+			throw new Error("Compte non trouvé");
 		}
 		const winnerId = lotteryData.winnerId;
 		const ticketAddress = await getTicketAddressAt(winnerId, lotteryAddress);
 		const txHash = await program.methods
 			.claimPrize(lotteryId, winnerId)
 			.accounts({
-			lottery: lotteryAddress,
-			ticket: ticketAddress,
-			buyer: wallet.publicKey,
+				lottery: lotteryAddress,
+				ticket: ticketAddress,
+				buyer: wallet.publicKey,
 			})
 			//.signers([wallet.publicKey])
 			.rpc();
-			//confirmTx(txHash, connection);
-		} catch (error) {
-			console.log("SOMETHING WENT WRONG in claimPrize");
-			console.error(error);
-		}
-};		
+		//confirmTx(txHash, connection);
+	} catch (error) {
+		console.log("SOMETHING WENT WRONG in claimPrize");
+		console.error(error);
+	}
+};
 
 export function PublicLotteriesTable() {
 	const [lotteries, setLotteries] = useState<UILottery[]>([]);
+
+	const unclaimedLotteries = lotteries.filter((lottery) => !lottery.claimed);
+
 	const { connection } = useConnection();
 	const wallet = useAnchorWallet();
 
