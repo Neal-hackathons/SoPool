@@ -117,9 +117,12 @@ export const claimPrize = async (
 
 		const lotteryData = await program.account.lottery.fetch(lotteryAddress);
 		if (!lotteryData) {
-			throw new Error("Compte non trouvé");
+			throw new Error("Lottery account not found");
 		}
 		const winnerId = lotteryData.winnerId;
+		if (winnerId == 0) {
+			throw new Error("Winner not selected yet!");
+		}
 		const ticketAddress = await getTicketAddressAt(winnerId, lotteryAddress);
 		const txHash = await program.methods
 			.claimPrize(lotteryId, winnerId)
@@ -128,12 +131,12 @@ export const claimPrize = async (
 				ticket: ticketAddress,
 				buyer: wallet.publicKey,
 			})
-			//.signers([wallet.publicKey])
 			.rpc();
 		//confirmTx(txHash, connection);
 	} catch (error) {
 		console.log("SOMETHING WENT WRONG in claimPrize");
 		console.error(error);
+		throw error;
 	}
 };
 
