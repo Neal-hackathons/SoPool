@@ -109,8 +109,13 @@ export function lamportsToSol(lamportsBN: BN) {
 
 // Function to convert lamports to SOL and format as "X SOL"
 export function formatLamportsToSolForUI(lamports: BN) {
-	const strLamports = lamports.toString(10,2);
-	return strLamports.startsWith("0") ? `0.${strLamports.slice(1,2)} SOL` : `${strLamports.slice(0,1)} SOL`
+	const lamportsPerSol = new BN(1_000_000_000);
+    const sol = lamports.div(lamportsPerSol).toNumber();
+    const remainder = lamports.mod(lamportsPerSol).toNumber();
+    const remainderStr = remainder.toString().padStart(9, '0'); // Ensures 9 digits for the fractional part
+    const fractionalPart = remainderStr.slice(0, 2); // Take only the first 2 digits for display
+    
+    return `${sol}.${fractionalPart} SOL`;
 }
 
 
