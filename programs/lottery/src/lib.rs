@@ -7,10 +7,9 @@ use anchor_lang::{
     solana_program::{clock::Clock, hash::hash, program::invoke, system_instruction::transfer},
 };
 
-use anchor_spl::{
-    associated_token::AssociatedToken,
-    token::{self,Mint, MintTo,Burn, Token, TokenAccount,Transfer as SplTransfer},   
-};
+use anchor_spl::token::{self,Mint,InitializeMint ,MintTo,Burn, Token, TokenAccount,Transfer as SplTransfer};
+use anchor_spl::associated_token::{self, AssociatedToken};
+
 
 use crate::{constants::*, error::LotteryError};
 
@@ -34,6 +33,29 @@ mod lottery {
 
         Ok(())
     }
+    /*pub fn initializeSpoolToken(ctx: Context<InitializeSpool>, decimals: u8, initial_supply: u64) -> Result<()> {
+        let cpi_accounts = InitializeMint {
+            mint: ctx.accounts.mint.to_account_info(),
+            rent: ctx.accounts.rent.to_account_info(),
+        };
+
+        let cpi_program = ctx.accounts.token_program.to_account_info();
+        let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
+
+        token::initialize_mint(cpi_context, decimals, ctx.accounts.authority.key, None)?;
+
+        let cpi_accounts = MintTo {
+            mint: ctx.accounts.mint.to_account_info(),
+            to: ctx.accounts.token_account.to_account_info(),
+            authority: ctx.accounts.authority.to_account_info(),
+        };
+
+        let cpi_context = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+
+        token::mint_to(cpi_context, initial_supply)?;
+
+        Ok(())
+    }*/
 
     pub fn create_lottery(ctx: Context<CreateLottery>, ticket_price: u64) -> Result<()> {
         let master = &mut ctx.accounts.master;
@@ -409,6 +431,23 @@ pub struct InitMaster<'info> {
 pub struct Master {
     pub last_id: u32,
 }
+
+/*#[derive(Accounts)]
+#[instruction(decimals: u8)]
+pub struct InitializeSpool<'info> {
+    #[account(init, payer = authority, space = Mint::LEN)]
+    pub mint: Account<'info, Mint>,
+    #[account(init, payer = authority, associated_token::mint = mint, associated_token::authority = authority)]
+    pub token_account: Account<'info, TokenAccount>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    #[account(address = token::ID)]
+    pub token_program: Program<'info, Token>,
+    #[account(address = associated_token::ID)]
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub rent: Sysvar<'info, Rent>,
+    pub system_program: Program<'info, System>,
+}*/
 
 
 #[derive(Accounts)]
