@@ -23,7 +23,7 @@ import { useToast } from "../ui/use-toast";
 export const adminColumns: ColumnDef<UILottery>[] = [
 	{
 		accessorKey: "id",
-		header: "Identifier",header: ({ column }) => {
+		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
