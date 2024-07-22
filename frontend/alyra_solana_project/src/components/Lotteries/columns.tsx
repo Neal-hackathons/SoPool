@@ -109,6 +109,7 @@ export const adminColumns: ColumnDef<UILottery>[] = [
 				} catch (error) {
 					const errorMessage = extractErrorMessage(error as Error);
 					toast({
+						variant: "destructive",
 						title: "Failure",
 						description: errorMessage,
 					});
@@ -215,6 +216,7 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 				} catch (error) {
 					const errorMessage = extractErrorMessage(error as Error);
 					toast({
+						variant: "destructive",
 						title: "Failure",
 						description: errorMessage,
 					});
@@ -239,11 +241,13 @@ export const publicColumns: ColumnDef<UILottery>[] = [
 				} catch (error) {
 					if ((error as Error).message.includes("violated")) {
 						toast({
+							variant: "destructive",
 							title: "Failure",
 							description: "You are not the winner",
 						});
 					} else {
 						toast({
+							variant: "destructive",
 							title: "Failure",
 							description: (error as Error).message,
 						});
